@@ -1,29 +1,26 @@
 import axios from "axios";
 import { API_KEY, URI } from "./constants";
-import { Book } from "@/types/book";
+import { Book, SimpleBook } from "@/types/book";
+import { ID } from "@/types/general";
+import { BookG, VolumeG } from "@/types/google-api/book-api";
+import { toSimpleBookDTO } from "./dto/book";
 
-async function searchBooks(word?: string): Promise<Book[] | undefined> {
+async function searchBooks(word = "fantasy"): Promise<SimpleBook[] | undefined> {
     try {
-        const query = word ? `?q=${word}` : ""
-        console.log(`${URI}/volumes${query}`)
         const { data } = await axios.get(`${URI}/volumes?q=${word}`)
-        const { items } = data;
-
-        const books = items.map((i) => {
-            const { title, description, imageLinks, authors, categories } = i.volumeInfo;
-            return {
-                id: i.id,
-                title,
-                authors,
-                categories,
-                review: { content: "", hasReview: false, score: 0 },
-                description,
-                imageLinks,
-            }
-        }) as Book[];
-        return books;
+        const { items }: VolumeG = data;
+        return items.map((i) => toSimpleBookDTO(i));
     } catch (err) {
         return [];
+    }
+}
+
+async function getBookById(id: ID): Promise<BookG | undefined> {
+    try {
+        const { data: book } = await axios.get(`${URI}/volumes/${id}`);
+        return book;
+    } catch (err) {
+        return undefined;
     }
 }
 
@@ -36,7 +33,8 @@ async function getMyBooks() {
     }
 }
 
-export const booksServices = {
+export const booksService = {
     searchBooks,
-    getMyBooks
+    getMyBooks,
+    getBookById
 }

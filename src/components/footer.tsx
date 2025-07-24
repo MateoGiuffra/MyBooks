@@ -5,7 +5,7 @@ import React from 'react'
 
 const footer = () => {
     return (
-        <footer className="w-full absolute bottom-0 bg-blue-200">
+        <footer className="w-full absolute bottom-0 border-t border-gray-400">
             <div className="w-full p-8 pt-2 pb-4 flex justify-between items-center">
                 <Link href="/" className="flex items-center flex-col gap-1">
                     <HomeIcon width={34} height={34} />

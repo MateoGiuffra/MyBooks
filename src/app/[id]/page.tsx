@@ -1,9 +1,17 @@
 import React from 'react'
-
-const page = () => {
-    return (
-        <div>page</div>
-    )
+import { booksService } from '@/services/books';
+interface IBookPageProps {
+    params: Promise<{ id: string }>
 }
 
-export default page
+const BookPage: React.FC<IBookPageProps> = async ({ params }) => {
+    const { id } = await params;
+    const book = await booksService.getBookById(id);
+    return (
+        <div>
+            <img src={book?.volumeInfo.imageLinks.extraLarge} alt="" />
+        </div>
+    );
+};
+
+export default BookPage;

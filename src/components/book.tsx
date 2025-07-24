@@ -1,8 +1,8 @@
 import React from "react";
-import { Book } from "@/types/book";
+import { SimpleBook } from "@/types/book";
 import Link from "next/link";
 interface IBookCardProps {
-    value: Book
+    value: SimpleBook
 }
 
 const BookCard: React.FC<IBookCardProps> = ({ value }) => {

@@ -1,9 +1,9 @@
 import React from 'react'
 
-const layout = () => {
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div>login</div>
+        <div className='w-full flex flex-col items-center '>{children}</div>
     )
 }
 
-export default layout
+export default AuthLayout

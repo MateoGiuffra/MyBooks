@@ -1,11 +1,11 @@
-import { Book } from '@/types/book';
+import { SimpleBook } from '@/types/book';
 import React from 'react'
 import BookCard from './book';
 import FadeInFlex from './fade-in-flex';
 import SearchLayout from '@/layouts/search-layout';
 
 interface ISearchProps {
-    call: () => Promise<Book[] | undefined>;
+    call: () => Promise<SimpleBook[] | undefined>;
 }
 
 const Search: React.FC<ISearchProps> = async ({ call }) => {

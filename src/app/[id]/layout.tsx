@@ -1,9 +1,10 @@
 import React from 'react'
 
-const layout = () => {
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div>pagina </div>
+        <div 
+        >{children}</div>
     )
 }
 
-export default layout
+export default AuthLayout

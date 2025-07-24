@@ -10,6 +10,14 @@
   --color-foreground: var(--foreground);
 } */
 
+@theme {
+  --height-header: 80px;
+  --height-footer: 86px;
+  --background-color-theme: #ededed;
+  --color-theme: #0a0a0a;
+  --border-color-theme: var(--background-color-theme);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -18,8 +26,8 @@
 }
 
 body {
-  background: var(--foreground);
-  color:var(--background);
+  background: var(--background-color-theme);
+  color:var(--color-theme);
   font-family: var(--font-newsreader), Arial, Helvetica, sans-serif;
 }
 
