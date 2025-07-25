@@ -1,32 +1,30 @@
-import { ArrowLeftIcon } from "@heroicons/react/16/solid";
+import Header from "@/components/header";
 import Link from "next/link";
 import React, { PropsWithChildren } from "react";
 
 interface IFormPageLayoutProps extends PropsWithChildren {
     title: string
     footerText: string,
-    href: string
+    href: string,
+    hideFooter?: boolean
 }
 
-const FormPageLayout: React.FC<IFormPageLayoutProps> = ({ children, title, footerText, href }) => {
+const PageLayout: React.FC<IFormPageLayoutProps> = ({ children, title, footerText, href, hideFooter = true }) => {
     return (
         <div className='w-full flex flex-col items-center'>
-            <section className='w-full flex items-center justify-center relative h-header'>
-                <Link href="/" className='absolute flex top-0 item-center justify-center h-header left-5'>
-                    <ArrowLeftIcon width={24} />
-                </Link>
-                <h2 className='font-bold text-[18px]'>{title}</h2>
-            </section>
+            <Header title={title} />
             {children}
-            <section className="absolute bottom-1 z-1 bg-theme w-full flex items-center justify-center flex-col h-footer text-neutral-600 ">
-                <Link href={href} className="flex gap-2 underline">
-                    <p>
-                        {footerText}
-                    </p>
-                </Link >
-            </section >
+            {hideFooter &&
+                <section className="absolute bottom-1 z-1 bg-theme w-full flex items-center justify-center flex-col h-footer text-theme-lighter ">
+                    <Link href={href} className="flex gap-2 underline">
+                        <p>
+                            {footerText}
+                        </p>
+                    </Link >
+                </section >
+            }
         </div >
     );
 };
 
-export default FormPageLayout;
+export default PageLayout;

@@ -15,6 +15,7 @@
   --height-footer: 86px;
   --background-color-theme: #ededed;
   --color-theme: #0a0a0a;
+  --color-theme-lighter: #637387;
   --border-color-theme: var(--background-color-theme);
 }
 
@@ -30,7 +31,6 @@ body {
   color:var(--color-theme);
   font-family: var(--font-newsreader), Arial, Helvetica, sans-serif;
 }
-
 
 @keyframes fadeInUp {
   from{

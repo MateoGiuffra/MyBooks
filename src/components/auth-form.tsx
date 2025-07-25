@@ -1,5 +1,6 @@
 "use client"
 import React, { ChangeEvent, createContext, FormEvent, useContext, useState } from 'react'
+import { useRouter } from 'next/navigation';
 import type { AuthFormType } from '@/types/auth';
 
 type AuthContextType = {
@@ -17,18 +18,24 @@ const useAuthForm = () => {
     return context;
 }
 
-export const Root = ({ children, btnText, auth }: { children: React.ReactNode, btnText: string, auth?: () => void }) => {
+export const Root = ({ children, btnText, auth }: { children: React.ReactNode, btnText: string, auth?: (form: AuthFormType) => Promise<void> }) => {
     const [formData, setFormData] = useState<AuthFormType>({
         nickname: "",
         password: "",
         email: "",
     } as AuthFormType);
     const [error, setError] = useState<string>("");
+    const router = useRouter();
 
-    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!validateForm()) return;
-        auth && auth();
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        try {
+            e.preventDefault();
+            if (!validateForm()) return;
+            auth && await auth(formData);
+            router.replace("/")
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const validateForm = () => {

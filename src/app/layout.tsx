@@ -23,10 +23,13 @@ export default function RootLayout({
         <html lang="en">
             <body
                 cz-shortcut-listen="true"
-                className={`${newsreader.variable} ${newsreader.variable} antialiased`}
+                className={`${newsreader.variable} ${newsreader.variable} antialiased flex flex-col w-full h-full justify-between`}
             >
-                {children}
+                <div className="h-full w-full">
+                    {children}
+                </div>
                 <Footer />
+                <div className="h-[80px]"></div>
             </body>
         </html>
     );

@@ -1,9 +1,9 @@
 import axios from "axios";
-import { API_KEY, URI } from "./constants";
+import { API_KEY, URI } from "@/api/config/constants";
 import { Book, SimpleBook } from "@/types/book";
 import { ID } from "@/types/general";
 import { BookG, VolumeG } from "@/types/google-api/book-api";
-import { toSimpleBookDTO } from "./dto/book";
+import { toSimpleBookDTO } from "../api/dto/book";
 
 async function searchBooks(word = "fantasy"): Promise<SimpleBook[] | undefined> {
     try {

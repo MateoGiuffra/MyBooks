@@ -1,12 +1,14 @@
+"use client"
 import React from 'react'
 import FormPageLayout from '@/layouts/auth-form-layout'
 import AuthForm from '@/components/auth-form'
+import { userService } from '@/services/users'
 
 const RegisterPage = () => {
     const title = "Iniciar Sesión"
     return (
         <FormPageLayout title={title} href="/login" footerText="¿Tienes una cuenta? Inicia sesión acá">
-            <AuthForm.Root btnText={title} auth={() => { }}>
+            <AuthForm.Root btnText={title} auth={userService.createNewUser}>
                 <AuthForm.NicknameInput />
                 <AuthForm.EmailInput />
                 <AuthForm.PasswordInput />
