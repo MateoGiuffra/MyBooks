@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import FormPageLayout from '@/layouts/auth-form-layout'
-import AuthForm from '@/components/auth-form'
+import AuthForm from '@/components/user/auth-form'
 import { userService } from '@/services/users'
 const LoginPage = () => {
     const title = "Iniciar Sesión"

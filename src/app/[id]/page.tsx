@@ -1,7 +1,7 @@
 import React from 'react'
 import { booksService } from '@/services/books';
-import ReviewSection from '@/components/review-section';
-import BookDescription from '@/components/book-description';
+import BookReview from '@/components/book/book-review';
+import BookDescription from '@/components/book/book-description';
 interface IBookPageProps {
     params: Promise<{ id: string }>
 }
@@ -32,6 +32,8 @@ const BookPage: React.FC<IBookPageProps> = async ({ params }) => {
         }
     } = book;
 
+
+
     return (
         <div className="w-full overflow-scroll">
             <img
@@ -45,8 +47,8 @@ const BookPage: React.FC<IBookPageProps> = async ({ params }) => {
                     <p className='w-full text-theme-lighter'>by {authors}</p>
                 </div>
                 <BookDescription html={description} />
-                <div>
-                    <ReviewSection />
+                <div className='w-full'>
+                    <BookReview book={book} />
                 </div>
             </div>
         </div>

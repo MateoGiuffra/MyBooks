@@ -6,7 +6,8 @@ import { saveToken } from "./token";
 import { db } from "@/api/config/constants";
 import { ReaderUser, readerUserConverter, ReaderUserI } from "@/types/user";
 import { ID } from "@/types/general";
-import { Review } from "@/types/book";
+import { Book, BookFirestore, Review } from "@/types/book";
+import { toFirestoreBookDTO } from "@/api/dto/book";
 
 // auth
 async function createNewUser(registerForm: AuthFormType) {
@@ -44,8 +45,9 @@ async function logout() {
         console.error(error)
     }
 }
-
 // auth
+
+
 async function saveUserInDatabase(user: ReaderUserI) {
     try {
         const ref = doc(db, "users", user.id).withConverter(readerUserConverter);
@@ -55,27 +57,25 @@ async function saveUserInDatabase(user: ReaderUserI) {
     }
 }
 
-async function addBookReviewToUser(readerUser: ReaderUser, newReview: Review, bookId: ID) {
-    try {
-        const { id } = readerUser;
-        const reviewsRef = doc(db, "users", id, "reviews", bookId);
-        await setDoc(reviewsRef, newReview);
-        await setDoc(doc(db, "users", id), readerUser, { merge: true })
-    } catch (error) {
-        console.error("Error updating document: ", error);
-    }
-}
+// async function addBookReviewToUser(readerUser: ReaderUser, newReview: Review, bookId: ID) {
+//     try {
+//         const { id } = readerUser;
+//         const reviewsRef = doc(db, "users", id, "reviews", bookId);
+//         await setDoc(reviewsRef, newReview);
+//         await setDoc(doc(db, "users", id), readerUser, { merge: true })
+//     } catch (error) {
+//         console.error("Error updating document: ", error);
+//     }
+// }
 
 
-async function addBookReadToUser(readerUser: ReaderUser, bookId: ID) {
+async function addBookReadByUser(bigBook: Book | BookFirestore, readerUser: ReaderUser) {
     try {
+        const book = toFirestoreBookDTO(bigBook)
+        const { id: bookId } = book;
         const { id } = readerUser;
-        const reviewsRef = doc(db, "users", id, "reviews", bookId);
-        await setDoc(reviewsRef, {
-            content: "",
-            hasReview: false,
-            score: 0
-        });
+        const reviewsRef = doc(db, "users", id, "books", bookId);
+        await setDoc(reviewsRef, book, { merge: true });
         await setDoc(doc(db, "users", id), readerUser, { merge: true })
     } catch (error) {
         console.error("Error updating document: ", error);
@@ -86,6 +86,7 @@ async function addBookReadToUser(readerUser: ReaderUser, bookId: ID) {
 
 async function getCurrentUser(id: ID) {
     try {
+        // const algo = getUser
         const docRef = doc(db, "users", id);
         const docSnap = await getDoc(docRef);
         return docSnap.exists() ? docSnap.data() as ReaderUser : null
@@ -97,8 +98,8 @@ async function getCurrentUser(id: ID) {
 export const userService = {
     createNewUser,
     signInUser,
-    addBookReviewToUser,
+    // addBookReviewToUser,
     getCurrentUser,
     logout,
-    addBookReadToUser
+    addBookReadByUser
 }

@@ -1,5 +1,5 @@
 "use client"
-import SearchBar from "@/components/search-bar";
+import SearchBar from "@/components/search/search-bar";
 import { SimpleBook } from "@/types/book";
 import React, { PropsWithChildren } from "react";
 

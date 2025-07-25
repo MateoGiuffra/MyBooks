@@ -1,13 +1,13 @@
 import React from "react";
 
-interface IBookButtonProps {
+interface IBookButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode
     bgColor?: "blue" | "gray" | string,
     fontColor?: "white" | "black" | string,
     onHandleClick?: () => void;
 }
 
-const BookButton: React.FC<IBookButtonProps> = ({ children, bgColor = "gray", fontColor = "black", onHandleClick }) => {
+const BookButton: React.FC<IBookButtonProps> = ({ children, bgColor = "gray", fontColor = "black", onHandleClick, ...props }) => {
     const finalBgColor = bgColor === "blue" ? "#1A78E5" : bgColor === "gray" ? "#dadada" : bgColor;
     return (
         <button
@@ -15,8 +15,9 @@ const BookButton: React.FC<IBookButtonProps> = ({ children, bgColor = "gray", fo
             className='bg-[#dadada] w-full rounded-[4px] p-1 pt-2 pb-2 font-semibold'
             style={{
                 color: fontColor,
-                backgroundColor: finalBgColor
+                backgroundColor: finalBgColor,
             }}
+            {...props}
         >
             {children}
         </button>

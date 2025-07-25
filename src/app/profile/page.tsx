@@ -4,42 +4,16 @@ import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from '@/api/config/firebase';
 import { useRouter } from 'next/navigation';
 import { userService } from '@/services/users';
-import InfoCard from '@/components/info-card';
+import InfoCard from '@/components/user/info-card';
 import { ReaderUser } from '@/types/user';
-import Header from '@/components/header';
-import BookButton from '@/components/button';
-import Spinner from '@/components/spinner';
+import Header from '@/components/ui/header';
+import BookButton from '@/components/ui/book-button';
+import Spinner from '@/components/loading/spinner';
+import { useUserAuthenticated } from '@/hooks/useUserAuthenticated';
 
 const page = () => {
 
-    const [id, setId] = useState<string>("");
-    const [userState, setUserState] = useState<ReaderUser | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const router = useRouter();
-
-    useEffect(() => {
-        setIsLoading(true);
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                setUserState(null);
-                router.replace("/login")
-                return;
-            } else {
-                setId(user.uid)
-            }
-        });
-        setIsLoading(false);
-    })
-
-    const setCurrentUser = async () => {
-        setUserState(await userService.getCurrentUser(id) ?? null);
-    }
-
-    useEffect(() => {
-        if (id) {
-            setCurrentUser();
-        }
-    }, [id])
+    const { userState, isLoading, router } = useUserAuthenticated()
 
     const closeSession = async () => {
         await userService.logout()

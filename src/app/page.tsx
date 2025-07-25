@@ -1,9 +1,5 @@
-import Search from '@/components/search'
-import React, { Suspense } from 'react'
-import SearchLayout from '@/layouts/search-layout'
-import BookSkeleton from '@/components/skeletons/book-skeleton';
-import FadeInFlex from '@/components/fade-in-flex'
-import Header from '@/components/header';
+import React from 'react'
+import SearchHome from '@/components/search/search-home';
 
 const page = () => {
 
@@ -15,7 +11,7 @@ const page = () => {
                     <p className="absolute right-0 text-4xl h-full flex items-center pr-4">+</p>
                 </div>
                 <div className='flex flex-col items-center w-full h-full p-4 m-[-15px]'>
-                    <Search />
+                    <SearchHome />
                 </div>
             </main>
         </div>
