@@ -8,6 +8,7 @@ import InfoCard from '@/components/info-card';
 import { ReaderUser } from '@/types/user';
 import Header from '@/components/header';
 import BookButton from '@/components/button';
+import Spinner from '@/components/spinner';
 
 const page = () => {
 
@@ -45,7 +46,7 @@ const page = () => {
         router.replace("/")
     }
 
-    if (isLoading || !userState) return <div>Cargando...</div>
+    if (isLoading || !userState) return <div className='absolute h-full w-full inset-0 m-auto'><Spinner /></div>
 
     const { reviewsAmount, booksAmount, description, averageRating, email, displayName, image } = userState;
 

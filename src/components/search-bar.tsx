@@ -1,30 +1,41 @@
 "use client"
-import React, { FormEvent } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import { SimpleBook } from "@/types/book";
 interface ISearchBarProps {
-    search?: () => void;
+    search?: (word: string) => void;
 }
 
-const SearchBar: React.FC<ISearchBarProps> = ({ search = () => { } }) => {
+const SearchBar: React.FC<ISearchBarProps> = ({ search }) => {
 
-    const onHandleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        console.log(e);
+    const [value, setValue] = useState("");
+
+    const onHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        const { value: newValue } = e.target;
+        if (newValue.length > value.length && value.length !== 0) {
+            search && search(value)
+        }
+
+        setValue(newValue);
     }
+
     const orderBy = (order: string) => {
 
     }
 
     return (
         <div className="w-full flex flex-col gap-4">
-            <form onSubmit={(e) => onHandleSubmit(e)} className="w-full relative rounded-[4px] ">
+            <form onSubmit={(e) => e.preventDefault()} className="w-full relative rounded-[4px] ">
                 <input
                     type="text"
                     className="bg-[#d4dff0] w-full p-2 pl-12 rounded-[4px]"
                     placeholder="Buscar"
+                    onChange={(e) => onHandleChange(e)}
                 />
                 <MagnifyingGlassIcon width={24} className="absolute left-2 top-[20%] " />
-                <button></button>
+                <button type="submit"></button>
             </form>
             <div className="flex items-center gap-2">
                 {["Fecha", "Títuto", "Autor"].map((order) =>

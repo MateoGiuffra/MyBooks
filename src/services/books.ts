@@ -5,7 +5,7 @@ import { ID } from "@/types/general";
 import { BookG, VolumeG } from "@/types/google-api/book-api";
 import { toSimpleBookDTO } from "../api/dto/book";
 
-async function searchBooks(word = "fantasy"): Promise<SimpleBook[] | undefined> {
+async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {
         const { data } = await axios.get(`${URI}/volumes?q=${word}`)
         const { items }: VolumeG = data;
