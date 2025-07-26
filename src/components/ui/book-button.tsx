@@ -4,7 +4,7 @@ interface IBookButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
     children: React.ReactNode
     bgColor?: "blue" | "gray" | string,
     fontColor?: "white" | "black" | string,
-    onHandleClick?: () => void;
+    onHandleClick?: (...props: any) => void;
 }
 
 const BookButton: React.FC<IBookButtonProps> = ({ children, bgColor = "gray", fontColor = "black", onHandleClick, ...props }) => {

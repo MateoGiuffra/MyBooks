@@ -43,7 +43,7 @@ export default function BookCalendar({ date, setDate, bgColor = "transparent" }:
                 components={{
                     DropdownNav: (props: DropdownNavProps) => {
                         return (
-                            <div className="flex w-full  items-center justify-center gap-3 [&>span]:text-sm [&>span]:font-medium">
+                            <div className="flex w-full   z-999999999999 items-center justify-center gap-3 [&>span]:text-sm [&>span]:font-medium">
                                 {props.children}
                             </div>
                         )
@@ -58,10 +58,10 @@ export default function BookCalendar({ date, setDate, bgColor = "transparent" }:
                                     }
                                 }}
                             >
-                                <SelectTrigger className="h-8 w-fit font-medium">
+                                <SelectTrigger className="z-999999999999 h-8 w-fit font-medium">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="max-h-[min(26rem,var(--radix-select-content-available-height))]">
+                                <SelectContent className="  z-999999999999 max-h-[min(26rem,var(--radix-select-content-available-height))]">
                                     {props.options?.map((option) => (
                                         <SelectItem
                                             key={option.value}
