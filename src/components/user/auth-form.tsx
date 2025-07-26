@@ -18,20 +18,31 @@ const useAuthForm = () => {
     return context;
 }
 
-export const Root = ({ children, btnText, auth }: { children: React.ReactNode, btnText: string, auth?: (form: AuthFormType) => Promise<void> }) => {
+export const Root = ({ children, btnText, auth, authByGoogle }: { children: React.ReactNode, btnText: string, auth?: (form: AuthFormType) => Promise<void>, authByGoogle?: (form: AuthFormType) => Promise<void> }) => {
     const [formData, setFormData] = useState<AuthFormType>({
         nickname: "",
         password: "",
         email: "",
     } as AuthFormType);
     const [error, setError] = useState<string>("");
+    const [byGoogle, setByGoogle] = useState<boolean>(false);
     const router = useRouter();
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (authByGoogle && byGoogle) {
+            await authAction(authByGoogle);
+            return;
+        }
+        if (auth) {
+            await authAction(auth);
+        }
+    }
+
+    const authAction = async (callback: (form: AuthFormType) => Promise<void>) => {
         try {
-            e.preventDefault();
-            if (!validateForm()) return;
-            auth && await auth(formData);
+            if (!byGoogle && !validateForm()) return;
+            auth && await callback(formData);
             router.replace("/")
         } catch (error) {
             console.error(error)
@@ -78,12 +89,15 @@ export const Root = ({ children, btnText, auth }: { children: React.ReactNode, b
                     {error && <p className='text-red-500 font-semibold w-full'>{error}</p>}
                 </div>
                 <div className='w-full flex flex-col items-center gap-4'>
-                    <button type='submit' className='bg-[#1A78E5] pt-2 pb-2 w-full rounded-[4px] p-1 text-white font-semibold'>
+                    <button type='submit' className='cursor-pointer  bg-[#1A78E5] pt-2 pb-2 w-full rounded-[4px] p-1 text-white font-semibold' onClick={() => setByGoogle(false)}>
                         {btnText}
                     </button>
                     <p>O</p>
-                    <button className='bg-[#dadada] w-full rounded-[4px] p-1 pt-2 pb-2 font-semibold'>
-                        Continuar con Google
+                    <button className='bg-[#dadada] cursor-pointer w-full rounded-[4px] p-1 pt-2 pb-2 font-semibold flex items-center justify-center' onClick={() => setByGoogle(true)}>
+                        <div className='flex w-full items-center justify-center gap-2 relative'>
+                            <p>Continuar con Google</p>
+                            <img className='w-[14px] h-[14px] mt-[-3px] absolute right-72' src="/google-icon.svg" alt="Google" />
+                        </div>
                     </button>
                 </div>
             </form>

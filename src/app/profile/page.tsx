@@ -38,7 +38,7 @@ const page = () => {
                         <p className='text-theme-lighter'>{email}</p>
                         <p className='text-theme-lighter'>{description}</p>
                     </section>
-                    <BookButton>
+                    <BookButton bgColor='blue' fontColor='white'>
                         Editar Perfil
                     </BookButton>
                     <section className='flex items-center w-full gap-4 justify-center h-full'>
@@ -48,7 +48,7 @@ const page = () => {
                     </section>
                 </div>
                 <div className='w-full flex-grow h-full mt-[271px]'>
-                    <BookButton bgColor='#e53535' fontColor='white' onHandleClick={() => closeSession()}>
+                    <BookButton onHandleClick={() => closeSession()}>
                         <p>Cerrar Sesión</p>
                     </BookButton>
                 </div>

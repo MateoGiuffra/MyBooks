@@ -1,6 +1,6 @@
 import { auth } from "@/api/config/firebase";
 import { AuthFormType } from "@/types/auth";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { collection, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
 import { saveToken } from "./token";
 import { db } from "@/api/config/constants";
@@ -32,9 +32,23 @@ async function signInUser(loginForm: AuthFormType) {
         if (!email) throw new Error("User must have a email!");
         await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-
+        console.error(error)
     }
 }
+
+
+async function signInByGoogle(loginForm: AuthFormType) {
+    try {
+        const provider = new GoogleAuthProvider();
+        const credentials = await signInWithPopup(auth, provider);
+        const user = new ReaderUser(credentials.user);
+        saveUserInDatabase(user);
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+
 
 async function logout() {
     try {
@@ -50,7 +64,7 @@ async function logout() {
 async function saveUserInDatabase(user: ReaderUserI) {
     try {
         const ref = doc(db, "users", user.id).withConverter(readerUserConverter);
-        await setDoc(ref, user);
+        await setDoc(ref, user, { merge: true });
     } catch (error) {
         console.error("Error adding document: ", error);
     }
@@ -97,7 +111,6 @@ async function addBookReadByUser(bigBook: Book | BookFirestore, readerUser: Read
 
 async function getCurrentUser(id: ID) {
     try {
-        // const algo = getUser
         const docRef = doc(db, "users", id);
         const docSnap = await getDoc(docRef);
         return docSnap.exists() ? docSnap.data() as ReaderUser : null
@@ -109,8 +122,8 @@ async function getCurrentUser(id: ID) {
 export const userService = {
     createNewUser,
     signInUser,
-    // addBookReviewToUser,
     getCurrentUser,
     logout,
-    addBookReadByUser
+    addBookReadByUser,
+    signInByGoogle
 }

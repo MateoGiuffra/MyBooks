@@ -7,7 +7,7 @@ const LoginPage = () => {
     const title = "Iniciar Sesión"
     return (
         <FormPageLayout title={title} href="/register" footerText="¿No tienes una cuenta? Registrate acá">
-            <AuthForm.Root btnText={title} auth={userService.signInUser}>
+            <AuthForm.Root btnText={title} auth={userService.signInUser} authByGoogle={userService.signInByGoogle} >
                 <AuthForm.EmailInput />
                 <AuthForm.PasswordInput />
             </AuthForm.Root>
