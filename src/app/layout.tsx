@@ -29,7 +29,7 @@ export default function RootLayout({
                     {children}
                 </div>
                 <Footer />
-                <div className="h-[80px]"></div>
+                <div className="h-[80px] bg-theme"></div>
             </body>
         </html>
     );

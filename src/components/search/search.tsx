@@ -1,5 +1,5 @@
 "use client"
-import { SimpleBook } from '@/types/book';
+import { BookFirestore, SimpleBook } from '@/types/book';
 import React, { useState } from 'react'
 import BookCard from '../book/book';
 import FadeInFlex from '@/layouts/fade-in-flex';
@@ -9,12 +9,12 @@ import { useFetching } from '@/hooks/useFetching';
 import { useRouter } from 'next/navigation';
 
 interface ISearchProps {
-    callback: (...args: any[]) => Promise<SimpleBook[]>
+    callback: (...args: any[]) => Promise<(SimpleBook | BookFirestore)[]>
 }
 
-const Search = <T,>({ callback }: ISearchProps) => {
+const Search = ({ callback }: ISearchProps) => {
     const [actualSearch, setActualSearch] = useState<string>("fantasy");
-    const { isLoading, values: books } = useFetching<SimpleBook>(callback, [actualSearch], [actualSearch], 300);
+    const { isLoading, values: books } = useFetching<SimpleBook | BookFirestore>(callback, [actualSearch], [actualSearch], 300);
     const router = useRouter();
 
     if (isLoading) {

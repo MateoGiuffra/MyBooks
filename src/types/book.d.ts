@@ -5,20 +5,22 @@ export interface Review {
     content: string,
     hasReview: boolean,
     score: number,
-    publishedRead: Timestamp | FieldValue;
+    publishedRead: Timestamp | Date;
 }
 
 export interface SimpleBook {
     id: ID,
-    authors: string[],
-    title: string,
-    description: string,
-    categories: string[],
-    review: Review,
-    imageLinks: {
-        smallThumbnail: string,
-        thumbnail: string
+    volumeInfo: {
+        title: string;
+        authors: string[];
+        description: string;
+        categories?: string[],
+        imageLinks: {
+            smallThumbnail?: string;
+            thumbnail?: string;
+        };
     }
+    review: Review;
 }
 
 export interface Book extends BookG {

@@ -9,7 +9,7 @@ export function useOnlyFetching<T>(callback: (...args: any[]) => Promise<T>, fet
     const fetch = async () => {
         try {
             setIsLoading(true);
-            const vals = await callback([...fetchParams]);
+            const vals = await callback(...fetchParams);
             setValue(vals);
             setError("");
         } catch (error) {

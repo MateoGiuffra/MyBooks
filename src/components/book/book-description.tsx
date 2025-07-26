@@ -1,13 +1,13 @@
 "use client"
 import React, { useState } from "react";
-import { truncate } from "fs";
 interface IBookDescriptionProps {
     html: string
 }
 
 const BookDescription: React.FC<IBookDescriptionProps> = ({ html }) => {
     const [sliceSize, setSliceSize] = useState<number>(500);
-    let finalHtml = html.slice(0, sliceSize) + "</p>";
+    console.log(html)
+    let finalHtml = html.length != 0 ? html.slice(0, sliceSize) + "</p>" : html;
     const showMore = finalHtml.length < html.length;
 
     return (

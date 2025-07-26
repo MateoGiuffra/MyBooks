@@ -46,7 +46,7 @@ const BookPage: React.FC<IBookPageProps> = async ({ params }) => {
                     <h2 className='text-[22px] font-bold w-full'>{title}</h2>
                     <p className='w-full text-theme-lighter'>by {authors}</p>
                 </div>
-                <BookDescription html={description} />
+                <BookDescription html={description ?? " "} />
                 <div className='w-full'>
                     <BookReview book={book} />
                 </div>

@@ -29,6 +29,14 @@ body {
   }
 }
 
+.calendar.show{
+  display:none
+}
+
+.calendar.hide{
+  display:none
+}
+
 @keyframes skeleton {
   to{
       background-color: #ffffff;

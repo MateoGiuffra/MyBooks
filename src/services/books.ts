@@ -5,7 +5,8 @@ import { ID } from "@/types/general";
 import { BookG, VolumeG } from "@/types/google-api/book-api";
 import { toSimpleBookDTO } from "../api/dto/book";
 import { db } from "@/api/config/constants";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+
 async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {
         const { data } = await axios.get(`${URI}/volumes?q=${word}`)
@@ -32,8 +33,7 @@ async function getBookById(id: ID): Promise<Book | undefined> {
     }
 }
 
-async function getFirestoreBookById(userId: ID, bookId: ID) {
-
+async function getFirestoreBookByUserId(bookId: ID, userId: ID) {
     try {
         if (!userId || !bookId) return null
         const docRef = await getDoc(doc(db, "users", userId, "books", bookId))
@@ -44,10 +44,16 @@ async function getFirestoreBookById(userId: ID, bookId: ID) {
     }
 }
 
-async function getMyBooks() {
+async function getMyBooksByUserId(userId: ID) {
     try {
-        const res = await axios.get(`${URI}/blogs/2399953?key=${API_KEY?.toString()}`)
-        return res.data;
+        if (!userId) return []
+        const docRef = await getDocs(collection(db, "users", userId, "books"))
+        if (docRef.empty) {
+            return []
+        } else {
+            const docs = docRef.docs
+            return docs.map((doc) => doc.data() as BookFirestore)
+        }
     } catch (error) {
         console.error(error)
         return []
@@ -56,8 +62,7 @@ async function getMyBooks() {
 
 export const booksService = {
     searchBooks,
-    getMyBooks,
+    getMyBooksByUserId,
     getBookById,
-    getFirestoreBookById,
-
+    getFirestoreBookByUserId,
 }

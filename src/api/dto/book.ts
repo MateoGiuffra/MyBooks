@@ -6,11 +6,13 @@ export function toSimpleBookDTO(book: BookG): SimpleBook {
     const { title, description, imageLinks, authors, categories } = book.volumeInfo;
     return {
         id: book.id,
-        title,
-        authors,
-        categories,
-        description,
-        imageLinks,
+        volumeInfo: {
+            title,
+            authors,
+            description,
+            imageLinks,
+            categories
+        },
         review: {
             content: "",
             hasReview: false,
@@ -20,6 +22,7 @@ export function toSimpleBookDTO(book: BookG): SimpleBook {
     }
 }
 
+
 export function toFirestoreBookDTO(book: Book | BookFirestore) {
     const { title, description, imageLinks, authors } = book.volumeInfo;
     return {
@@ -27,7 +30,7 @@ export function toFirestoreBookDTO(book: Book | BookFirestore) {
         volumeInfo: {
             title,
             authors,
-            description,
+            description: description ?? "No Disponible",
             imageLinks,
         },
         review: {

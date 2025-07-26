@@ -1,97 +1,145 @@
 "use client"
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, {
+    ChangeEvent,
+    FormEvent,
+    useEffect,
+    useState,
+    useCallback
+} from "react";
 import BookButton from "../ui/book-button";
 import { Book, BookFirestore, Review } from "@/types/book";
 import { userService } from "@/services/users";
 import { useUserAuthenticated } from "@/hooks/useUserAuthenticated";
 import { useCalendar } from "@/hooks/useCalendar";
 import BookCalendar from "@/components/ui/my-calendar";
+import ReviewSkeleton from "../skeletons/review-skeleton";
 
 interface IReviewSectionProps {
     book: Book | BookFirestore;
-    finishEditMode?: () => void;
+    finishEditMode: () => void;
 }
 
 const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode }) => {
-    const [reviewState, setReviews] = useState<Review>({
-        hasReview: false,
-        content: "",
-        score: 2.5
-    } as Review)
+    const { userState } = useUserAuthenticated(false);
     const { date, setDate } = useCalendar();
-    const { userState } = useUserAuthenticated(false)
 
-    const updateReview = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        const { value, name } = e.target;
-        const valueFormated = "score" === name ? Number(value) : value
-        setReviews({
-            ...reviewState,
-            [name]: valueFormated
-        })
-    }
-
+    const [content, setContent] = useState("");
+    const [score, setScore] = useState(2.5);
+    const [publishedRead, setPublishedRead] = useState(new Date());
+    const [hasReview, setHasReview] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false);
 
     useEffect(() => {
-        if (book.review && book.review.hasReview) {
-            setReviews(book.review);
+        if (book.review?.hasReview) {
+            setHasReview(book.review.hasReview);
+            setContent(book.review.content);
+            setScore(book.review.score);
+            setPublishedRead((book.review.publishedRead as any).toDate());
         }
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (date) {
+            setPublishedRead(date);
+        }
+        if (book.review?.hasReview) {
+            setHasReview(book.review.hasReview)
+        }
+    }, [date, book]);
+
+    const handleScoreChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setScore(Number(e.target.value));
+    }, []);
+
+    const handleContentChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+        setContent(e.target.value);
+    }, []);
 
     const onSend = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!userState) {
+            alert("Debes estar logeado primero!");
+            return;
+        }
+
+        const newReview: Review = {
+            hasReview: book.review?.hasReview,
+            content,
+            score,
+            publishedRead
+        };
+
         try {
-            e.preventDefault();
-            if (!userState) {
-                alert("Debes estar logeado primero!")
-                return;
-            }
-            setReviews({
-                ...reviewState,
-                hasReview: true
-            })
             const bookUpdated = {
                 ...book,
-                review: reviewState
-            }
+                review: newReview
+            };
+
             await userService.addBookReadByUser(bookUpdated, userState);
-            finishEditMode && finishEditMode();
-            alert("Review Actualizada")
+            finishEditMode?.();
+            alert("Review Actualizada");
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
+    };
+
+    if (!book) {
+        return <ReviewSkeleton />;
     }
+
 
     return (
         <div className="w-full flex flex-col items-center">
-            <form action="" className="w-full flex flex-col  gap-4" onSubmit={(e) => onSend(e)}>
+            <form className="w-full flex flex-col gap-4" onSubmit={onSend}>
                 <input
                     type="range"
                     min="0.5"
                     max="5"
                     step="0.5"
                     name="score"
-                    value={reviewState.score}
+                    value={score}
                     className="star-rating"
-                    style={{ ['--val' as any]: reviewState.score } as React.CSSProperties}
-                    onChange={e => updateReview(e)}
+                    style={{ ['--val' as any]: score } as React.CSSProperties}
+                    onChange={handleScoreChange}
                 />
                 <textarea
                     className="w-full bg-white rounded-[4px] p-2 pt-1 pb-10 overflow-auto"
                     placeholder="Escribe tu review aqui"
                     name="content"
-                    onChange={e => updateReview(e)}
+                    value={content}
+                    onChange={handleContentChange}
                 />
                 <div className="w-full flex flex-col items-center gap-4">
-                    <label className="w-full flex gap-2 cursor-pointer">
-                        <p>Fecha de lectura</p>
-                        <span className="text-theme-lighter ">( por defecto hoy )
-                        </span>
+                    <label onClick={() => setShowCalendar(true)} className="w-full flex gap-2 cursor-pointer">
+                        <p className="underline">Seleccionar fecha</p>
+                        <span className="text-theme-lighter">({publishedRead.toLocaleDateString("es-ES", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric"
+                        })})</span>
                     </label>
-                    <BookCalendar date={date} setDate={setDate} bgColor="white" />
+                    {showCalendar && (
+                        <div
+                            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/30"
+                            onClick={() => setShowCalendar(false)}
+                        >
+                            <div
+                                className="bg-white p-6 rounded-xl shadow-lg z-[10000]"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <BookCalendar date={date} setDate={setDate} bgColor="white" />
+                            </div>
+                        </div>
+                    )}
                 </div>
-                <BookButton bgColor="blue" fontColor="white" type="submit">Actualizar</BookButton>
-                <BookButton onHandleClick={finishEditMode}>Cancelar</BookButton>
+                <BookButton bgColor="blue" fontColor="white" type="submit">
+                    Actualizar
+                </BookButton>
             </form>
-        </div >
+            <div className="w-full pt-4">
+                <BookButton onHandleClick={finishEditMode}>Cancelar</BookButton>
+            </div>
+        </div>
     );
 };
 

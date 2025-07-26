@@ -12,18 +12,17 @@ export function useUserAuthenticated(goToLogin: boolean = true) {
     const router = useRouter();
 
     useEffect(() => {
-        setIsLoading(true);
         onAuthStateChanged(auth, (user) => {
+            setIsLoading(true);
             if (!user) {
                 setUserState(null);
                 setId("");
                 goToLogin && router.replace("/login")
-                return;
             } else {
                 setId(user.uid)
             }
+            setIsLoading(false);
         });
-        setIsLoading(false);
     }, [])
 
     const setCurrentUser = async () => {

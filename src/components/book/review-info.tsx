@@ -8,7 +8,12 @@ interface BookIReviewInfoProps {
 }
 
 const BookReviewInfo: React.FC<BookIReviewInfoProps> = ({ book, startEditMode }) => {
+    if (!book) {
+        return <>HOLA</>
+    }
+
     const { review } = book;
+
     let dateFormatted = "";
     let yearFormatted = "";
 
@@ -36,7 +41,7 @@ const BookReviewInfo: React.FC<BookIReviewInfoProps> = ({ book, startEditMode })
                     style={{ ['--val' as any]: review.score } as React.CSSProperties}
                 />
             </div>
-            <p>{"A captivating read with a plot that keeps you guessing until the very end. The characters are well-developed, and the suspense is palpable."}</p>
+            <p>{book.review.content}</p>
             <div className="flex flex-col ">
                 <div className="border-t-1 border-gray-400 pt-4 max-w-[110px]"></div>
                 <p className="text-theme-lighter">Ultima vez leido</p>

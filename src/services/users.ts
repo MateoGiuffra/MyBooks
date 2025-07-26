@@ -30,8 +30,7 @@ async function signInUser(loginForm: AuthFormType) {
     try {
         const { email, password } = loginForm;
         if (!email) throw new Error("User must have a email!");
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
 
     }
@@ -57,31 +56,43 @@ async function saveUserInDatabase(user: ReaderUserI) {
     }
 }
 
-// async function addBookReviewToUser(readerUser: ReaderUser, newReview: Review, bookId: ID) {
-//     try {
-//         const { id } = readerUser;
-//         const reviewsRef = doc(db, "users", id, "reviews", bookId);
-//         await setDoc(reviewsRef, newReview);
-//         await setDoc(doc(db, "users", id), readerUser, { merge: true })
-//     } catch (error) {
-//         console.error("Error updating document: ", error);
-//     }
-// }
-
-
-async function addBookReadByUser(bigBook: Book | BookFirestore, readerUser: ReaderUser) {
+async function addBookReadByUser(bigBook: Book | BookFirestore, readerUser: ReaderUserI) {
     try {
-        const book = toFirestoreBookDTO(bigBook)
-        const { id: bookId } = book;
+        if (!readerUser.id || !bigBook.id) {
+            throw new Error("Se necesitan IDs!");
+        }
         const { id } = readerUser;
+
+        const userDoc = await getDoc(doc(db, "users", id));
+        if (!userDoc.exists()) {
+            throw new Error("User not found in Firestore");
+        }
+
+        const firestoreBook = toFirestoreBookDTO(bigBook);
+
+        const readerUserInstance = new ReaderUser();
+        readerUserInstance.fromJSON(userDoc.data() as ReaderUserI);
+        readerUserInstance.registerNewReview(firestoreBook.review);
+
+        const book = {
+            ...firestoreBook,
+            review: {
+                ...(firestoreBook.review ?? {}),
+                hasReview: true,
+            },
+        };
+        const { id: bookId } = book;
+
         const reviewsRef = doc(db, "users", id, "books", bookId);
         await setDoc(reviewsRef, book, { merge: true });
-        await setDoc(doc(db, "users", id), readerUser, { merge: true })
+
+        await setDoc(doc(db, "users", id), readerUserInstance.toJSON(), { merge: true });
+
+        console.log("✅ Review registrada correctamente");
     } catch (error) {
-        console.error("Error updating document: ", error);
+        console.error("❌ Error updating document: ", error);
     }
 }
-
 
 
 async function getCurrentUser(id: ID) {

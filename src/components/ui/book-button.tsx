@@ -12,7 +12,7 @@ const BookButton: React.FC<IBookButtonProps> = ({ children, bgColor = "gray", fo
     return (
         <button
             onClick={onHandleClick}
-            className='bg-[#dadada] w-full rounded-[4px] p-1 pt-2 pb-2 font-semibold'
+            className='hover:cursor-pointer bg-[#dadada] w-full rounded-[4px] p-1 pt-2 pb-2 font-semibold'
             style={{
                 color: fontColor,
                 backgroundColor: finalBgColor,
