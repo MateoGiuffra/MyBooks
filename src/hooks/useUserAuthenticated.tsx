@@ -26,7 +26,7 @@ export function useUserAuthenticated(goToLogin: boolean = true) {
     }, [])
 
     const setCurrentUser = async () => {
-        setUserState(await userService.getCurrentUser(id) ?? null);
+        setUserState(await userService.getUserById(id) ?? null);
     }
 
     useEffect(() => {

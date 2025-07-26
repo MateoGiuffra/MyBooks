@@ -14,7 +14,7 @@ async function saveOrUpdateUser(user: ReaderUserI) {
     }
 }
 
-async function addBookReadByUser(bigBook: Book | BookFirestore, readerUser: ReaderUserI) {
+async function addUserReadBook(bigBook: Book | BookFirestore, readerUser: ReaderUserI) {
     try {
         if (!readerUser.id || !bigBook.id) {
             throw new Error("Se necesitan IDs!");
@@ -53,7 +53,7 @@ async function addBookReadByUser(bigBook: Book | BookFirestore, readerUser: Read
 }
 
 
-async function getCurrentUser(id: ID) {
+async function getUserById(id: ID) {
     try {
         const docRef = doc(db, "users", id);
         const docSnap = await getDoc(docRef);
@@ -63,4 +63,4 @@ async function getCurrentUser(id: ID) {
     }
 }
 
-export { getCurrentUser, addBookReadByUser, saveOrUpdateUser }
+export { getUserById, addUserReadBook, saveOrUpdateUser }
