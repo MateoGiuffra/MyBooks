@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import BookButton from "../ui/book-button";
 import { Book, BookFirestore, Review } from "@/types/book";
-import { userService } from "@/services/users";
+import { userService } from "@/services/user/service";
 import { useUserAuthenticated } from "@/hooks/useUserAuthenticated";
 import { useCalendar } from "@/hooks/useCalendar";
 import BookCalendar from "@/components/ui/my-calendar";
