@@ -43,6 +43,14 @@ body {
   }
 }
 
+.animate-shimmer {
+  animation: shimmer 1.5s infinite linear;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 .star-rating {
   --size: 2rem;
   --mask: conic-gradient(from -18deg at 61% 34.5%, #3344e400 108deg, #000 0) 0 0 / var(--size) var(--size),

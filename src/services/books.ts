@@ -3,9 +3,9 @@ import { API_KEY, URI } from "@/api/config/constants";
 import { Book, BookFirestore, Review, SimpleBook } from "@/types/book";
 import { ID } from "@/types/general";
 import { BookG, VolumeG } from "@/types/google-api/book-api";
-import { toSimpleBookDTO } from "../api/dto/book";
+import { toFirestoreBookDTO, toSimpleBookDTO } from "../api/dto/book";
 import { db } from "@/api/config/constants";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 
 async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {
@@ -60,9 +60,29 @@ async function getMyBooksByUserId(userId: ID) {
     }
 }
 
+async function saveOrUpdateBook(initialBook: Book | BookFirestore, userId: ID) {
+    try {
+        const firestoreBook = toFirestoreBookDTO(initialBook);
+        const book = {
+            ...firestoreBook,
+            review: {
+                ...(firestoreBook.review ?? {}),
+                hasReview: true,
+            },
+        };
+        const { id: bookId } = book;
+
+        const reviewsRef = doc(db, "users", userId, "books", bookId);
+        await setDoc(reviewsRef, book, { merge: true });
+    } catch (error) {
+
+    }
+}
+
 export const booksService = {
     searchBooks,
     getMyBooksByUserId,
     getBookById,
     getFirestoreBookByUserId,
+    saveOrUpdateBook,
 }

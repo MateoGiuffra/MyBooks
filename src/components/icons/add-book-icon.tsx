@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import AddNewBookForm from '../book/add-new-book-form'
 import Modal from '../ui/modal'
 
-const AddBookIcon = () => {
+const AddBookIcon = ({ reloadSearch }: { reloadSearch: () => void }) => {
     const [show, setShow] = useState<boolean>(false);
     return (
         <>
@@ -14,7 +14,7 @@ const AddBookIcon = () => {
                 show={show}
                 closeModal={() => setShow(false)}
             >
-                < AddNewBookForm closeForm={() => setShow(false)} />
+                < AddNewBookForm closeForm={() => setShow(false)} reloadSearch={reloadSearch}/>
             </Modal>
         </>
     )

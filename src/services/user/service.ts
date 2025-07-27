@@ -1,5 +1,5 @@
 import { registerNewUser, signInUser, logout, signInByGoogle } from "./auth"
-import { getUserById, addUserReadBook } from "./repository"
+import { getUserById, addUserReadBook, addNewBookByUser } from "./repository"
 
 export const userService = {
     registerNewUser,
@@ -7,5 +7,6 @@ export const userService = {
     getUserById,
     logout,
     addUserReadBook,
-    signInByGoogle
+    signInByGoogle,
+    addNewBookByUser
 }

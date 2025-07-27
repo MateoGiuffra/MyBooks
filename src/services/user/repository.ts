@@ -1,9 +1,11 @@
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, collection, addDoc, DocumentData } from "firebase/firestore";
 import { db } from "@/api/config/constants";
 import { ReaderUser, readerUserConverter, ReaderUserI } from "@/types/user";
 import { ID } from "@/types/general";
 import { Book, BookFirestore } from "@/types/book";
-import { toFirestoreBookDTO } from "@/api/dto/book";
+import { booksService } from "../books";
+
+const { saveOrUpdateBook } = booksService
 
 async function saveOrUpdateUser(user: ReaderUserI) {
     try {
@@ -26,29 +28,50 @@ async function addUserReadBook(bigBook: Book | BookFirestore, readerUser: Reader
             throw new Error("User not found in Firestore");
         }
 
-        const firestoreBook = toFirestoreBookDTO(bigBook);
-
-        const readerUserInstance = new ReaderUser();
-        readerUserInstance.fromJSON(userDoc.data() as ReaderUserI);
-        readerUserInstance.registerNewReview(firestoreBook.review);
-
-        const book = {
-            ...firestoreBook,
-            review: {
-                ...(firestoreBook.review ?? {}),
-                hasReview: true,
-            },
-        };
-        const { id: bookId } = book;
-
-        const reviewsRef = doc(db, "users", id, "books", bookId);
-        await setDoc(reviewsRef, book, { merge: true });
-
-        await setDoc(doc(db, "users", id), readerUserInstance.toJSON(), { merge: true });
+        await registerNewReview(userDoc, bigBook);
+        await saveOrUpdateBook(bigBook, id);
 
         console.log("✅ Review registrada correctamente");
     } catch (error) {
         console.error("❌ Error updating document: ", error);
+    }
+}
+
+
+
+async function addNewBookByUser(book: BookFirestore, userId: ID) {
+    try {
+        if (!userId) {
+            throw new Error("Se necesitan IDs!");
+        }
+        const userDoc = await getDoc(doc(db, "users", userId));
+        if (!userDoc.exists()) {
+            throw new Error("User not found in Firestore");
+        }
+
+        const docRef = doc(collection(db, "users", userId, "books"));
+        const bookWithId = {
+            ...book,
+            id: docRef.id,
+        }
+
+        await registerNewReview(userDoc, bookWithId);
+        await saveOrUpdateBook(bookWithId, userId);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function registerNewReview(userDoc: DocumentData, book: BookFirestore | Book) {
+    try {
+        const readerUser = userDoc.data() as ReaderUserI;
+        const readerUserInstance = new ReaderUser();
+        readerUserInstance.fromJSON(readerUser);
+        readerUserInstance.registerNewReview(book.review);
+
+        await setDoc(doc(db, "users", readerUser.id), readerUserInstance.toJSON(), { merge: true });
+    } catch (error) {
+
     }
 }
 
@@ -63,4 +86,4 @@ async function getUserById(id: ID) {
     }
 }
 
-export { getUserById, addUserReadBook, saveOrUpdateUser }
+export { getUserById, addUserReadBook, saveOrUpdateUser, addNewBookByUser }
