@@ -26,12 +26,10 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
     const [content, setContent] = useState("");
     const [score, setScore] = useState(2.5);
     const [publishedRead, setPublishedRead] = useState(new Date());
-    const [hasReview, setHasReview] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
 
     useEffect(() => {
         if (book.review?.hasReview) {
-            setHasReview(book.review.hasReview);
             setContent(book.review.content);
             setScore(book.review.score);
             setPublishedRead((book.review.publishedRead as any).toDate());
@@ -41,9 +39,6 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
     useEffect(() => {
         if (date) {
             setPublishedRead(date);
-        }
-        if (book.review?.hasReview) {
-            setHasReview(book.review.hasReview)
         }
     }, [date, book]);
 

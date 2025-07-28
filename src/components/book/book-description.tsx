@@ -4,10 +4,9 @@ interface IBookDescriptionProps {
     html: string
 }
 
-const BookDescription: React.FC<IBookDescriptionProps> = ({ html }) => {
+const BookDescription: React.FC<IBookDescriptionProps> = ({ html = "" }) => {
     const [sliceSize, setSliceSize] = useState<number>(500);
-    console.log(html)
-    let finalHtml = html.length != 0 ? html.slice(0, sliceSize) + "</p>" : html;
+    const finalHtml = html.length != 0 ? html.slice(0, sliceSize) + "</p>" : html;
     const showMore = finalHtml.length < html.length;
 
     return (
