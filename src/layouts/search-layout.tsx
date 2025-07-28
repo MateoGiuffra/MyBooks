@@ -4,13 +4,13 @@ import { SimpleBook } from "@/types/book";
 import React, { PropsWithChildren } from "react";
 
 interface ISearchLayoutProps extends PropsWithChildren {
-    search?: (word: string) => void;
+    searchState: { actualSearch: string, setActualSearch: (word: string) => void; }
 }
 
-const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, search }) => {
+const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, searchState }) => {
     return (
         <div className="w-full flex flex-col h-full items-center gap-8">
-            <SearchBar search={search} />
+            <SearchBar searchState={searchState} />
             {children}
         </div>
     );

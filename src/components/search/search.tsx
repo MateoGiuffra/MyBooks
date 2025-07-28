@@ -1,40 +1,49 @@
 "use client"
 import { BookFirestore, SimpleBook } from '@/types/book';
-import React, { useState } from 'react'
+import React from 'react'
 import BookCard from '../book/book';
 import FadeInFlex from '@/layouts/fade-in-flex';
-import SearchLayout from '@/layouts/search-layout';
 import BookSkeleton from '../skeletons/book-skeleton';
 import { useFetching } from '@/hooks/useFetching';
 import { useRouter } from 'next/navigation';
-import SearchSkeleton from '../skeletons/search-skeleton';
+import SearchBar from './search-bar';
+import { orderByDate, orderByTitle } from '@/utils/search';
 
 interface ISearchProps {
     callback: (...args: any[]) => Promise<(SimpleBook | BookFirestore)[]>;
     dependencies?: any[];
+    searchState: { actualSearch: string, setActualSearch: (word: string) => void; }
+    orderBy: (word: string, books: SimpleBook[] | BookFirestore[]) => SimpleBook[] | BookFirestore[];
+    filters: string[]
 }
 
-const Search = ({ callback, dependencies = [] }: ISearchProps) => {
-    const [actualSearch, setActualSearch] = useState<string>("fantasy");
-    const { isLoading, values: books } = useFetching<SimpleBook | BookFirestore>(callback, [actualSearch], [actualSearch, ...dependencies], 300);
+const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: ISearchProps) => {
+    const { actualSearch } = searchState;
+    const { isLoading, values: books, updateValues } = useFetching<SimpleBook | BookFirestore>(callback, [actualSearch], [actualSearch, ...dependencies], 200);
     const router = useRouter();
 
-    if (isLoading) {
-        return (
-            <SearchSkeleton />
-        )
-    }
-
     return (
-        <SearchLayout search={setActualSearch}>
-            <FadeInFlex>
-                {books?.map((b) =>
-                    <div onClick={() => router.push(b.id)}>
-                        <BookCard key={b.id} value={b} />
+        <div className="w-full flex flex-col h-full items-center gap-8">
+            <SearchBar searchState={searchState} orderBy={(s: string) => {
+                const booksSorted = orderBy(s, books)
+                updateValues(booksSorted)
+            }} filters={filters} />
+            {
+                isLoading ?
+                    <div className='flex flex-col gap-2 items-center justify-center w-full'>
+                        {Array.from({ length: 9 }).map((_, i) =>
+                            <BookSkeleton key={i} />)}
                     </div>
-                )}
-            </FadeInFlex>
-        </SearchLayout>
+                    :
+                    <FadeInFlex>
+                        {books?.map((b) =>
+                            <div onClick={() => router.push(b.id)}>
+                                <BookCard key={b.id} value={b} />
+                            </div>
+                        )}
+                    </FadeInFlex>
+            }
+        </div>
     );
 };
 

@@ -3,7 +3,7 @@ import { BookG } from "@/types/google-api/book-api";
 import { serverTimestamp } from "firebase/firestore";
 
 export function toSimpleBookDTO(book: BookG): SimpleBook {
-    const { title, description, imageLinks, authors, categories } = book.volumeInfo;
+    const { title, description, imageLinks, authors, categories, publishedDate } = book.volumeInfo;
     return {
         id: book.id,
         volumeInfo: {
@@ -11,7 +11,8 @@ export function toSimpleBookDTO(book: BookG): SimpleBook {
             authors,
             description,
             imageLinks,
-            categories
+            categories,
+            publishedDate
         },
         review: {
             content: "",
@@ -24,7 +25,7 @@ export function toSimpleBookDTO(book: BookG): SimpleBook {
 
 
 export function toFirestoreBookDTO(book: Book | BookFirestore) {
-    const { title, description, imageLinks, authors } = book.volumeInfo;
+    const { title, description, imageLinks, authors, publishedDate } = book.volumeInfo;
     return {
         id: book.id,
         volumeInfo: {
@@ -32,6 +33,7 @@ export function toFirestoreBookDTO(book: Book | BookFirestore) {
             authors,
             description: description ?? "No Disponible",
             imageLinks,
+            publishedDate
         },
         review: {
             ...book.review,

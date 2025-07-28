@@ -14,7 +14,7 @@ const AddBookIcon = ({ reloadSearch }: { reloadSearch: () => void }) => {
                 show={show}
                 closeModal={() => setShow(false)}
             >
-                < AddNewBookForm closeForm={() => setShow(false)} reloadSearch={reloadSearch}/>
+                <AddNewBookForm closeForm={() => setShow(false)} reloadSearch={reloadSearch} />
             </Modal>
         </>
     )

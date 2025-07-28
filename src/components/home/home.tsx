@@ -1,16 +1,33 @@
 "use client"
 import React, { useState } from 'react'
 import AddBookIcon from '../icons/add-book-icon'
-import SearchHome from '../search/search-home'
 import { useUserAuthenticated } from '@/hooks/useUserAuthenticated'
 import Search from '../search/search'
 import { booksService } from '@/services/books'
-import Spinner from '../loading/spinner'
 import SearchSkeleton from '../skeletons/search-skeleton'
-
+import { BookFirestore, SimpleBook } from '@/types/book'
+import { orderByDateReview, orderByTitle } from '@/utils/search'
+export const TITLE = "Título"
+export const DATE = "Fecha"
 const Home = () => {
+    const [actualSearch, setActualSearch] = useState<string>("");
+    const searchState = { actualSearch, setActualSearch }
     const [reloadSearch, setReloadSearch] = useState(false);
-    const { id, isLoading, userState } = useUserAuthenticated()
+    const { id, isLoading, userState } = useUserAuthenticated();
+
+    const filters = [TITLE, DATE];
+
+    const orderBy = (filter: string, books: SimpleBook[] | BookFirestore[]) => {
+        switch (filter) {
+            case TITLE:
+                return orderByTitle(books);
+            case DATE:
+                return orderByDateReview(books);
+            default:
+                return books;
+        }
+    }
+
     return (
         <>
             <div className="relative w-full flex items-center justify-center  h-header" >
@@ -19,12 +36,14 @@ const Home = () => {
             </div>
             <div className='flex flex-col items-center w-full h-full p-4 m-[-15px]'>
                 {isLoading || !userState ?
-                    <SearchSkeleton />
+                    <SearchSkeleton searchState={searchState} />
                     :
-                    <Search dependencies={[reloadSearch]} callback={() => booksService.getMyBooksByUserId(id)} />}
+                    <Search filters={filters} orderBy={orderBy} searchState={searchState} callback={() => booksService.searchBooksOfUserIdByWord(id, actualSearch)} />
+                }
             </div>
         </>
     )
 }
 
 export default Home
+

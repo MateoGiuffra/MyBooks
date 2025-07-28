@@ -1,7 +1,12 @@
 import debounce from "just-debounce-it";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export function useFetching<T>(callback: (...args: any[]) => Promise<T[]>, fetchParams: any[] = [], arrayDependencies: any[] = [], timeout: number = 0) {
+export function useFetching<T>(
+    callback: (...args: any[]) => Promise<T[]>,
+    fetchParams: any[] = [],
+    arrayDependencies: any[] = [],
+    timeout: number = 0
+) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
     const [values, setValues] = useState<T[]>([]);
@@ -9,21 +14,30 @@ export function useFetching<T>(callback: (...args: any[]) => Promise<T[]>, fetch
     const fetch = async () => {
         try {
             setIsLoading(true);
-            const vals = await callback([...fetchParams]);
+            const vals = await callback(...fetchParams);
             setValues(vals);
             setError("");
         } catch (error) {
-            console.error(error)
+            console.error(error);
             setError(`${error}`);
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+
+    const debouncedFetchRef = useRef<() => void>(null);
 
     useEffect(() => {
-        const fetchDebounce = debounce(() => fetch(), timeout);
-        fetchDebounce();
-    }, [...arrayDependencies])
+        debouncedFetchRef.current = debounce(fetch, timeout);
+    }, [callback, timeout]);
 
-    return { isLoading, error, values }
+    useEffect(() => {
+        debouncedFetchRef.current?.();
+    }, [...arrayDependencies]);
+
+    const updateValues = (newValues: T[]) => {
+        setValues(newValues);
+    };
+
+    return { isLoading, error, values, updateValues };
 }

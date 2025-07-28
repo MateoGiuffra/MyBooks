@@ -15,6 +15,7 @@ export interface SimpleBook {
         authors: string[];
         description: string;
         categories?: string[],
+        publishedDate: string;
         imageLinks: {
             smallThumbnail?: string;
             thumbnail?: string;
@@ -33,6 +34,7 @@ export interface BookFirestore {
         title: string;
         authors: string[];
         description: string;
+        publishedDate: string;
         imageLinks: {
             smallThumbnail?: string;
             thumbnail?: string;

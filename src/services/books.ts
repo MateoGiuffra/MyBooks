@@ -5,11 +5,12 @@ import { ID } from "@/types/general";
 import { BookG, VolumeG } from "@/types/google-api/book-api";
 import { toFirestoreBookDTO, toSimpleBookDTO } from "../api/dto/book";
 import { db } from "@/api/config/constants";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, FieldPath, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 
 async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {
-        const { data } = await axios.get(`${URI}/volumes?q=${word}`)
+        console.log("word", word)
+        const { data } = await axios.get(`${URI}/volumes?q=${word.trim() == "" ? "fantasy" : word}`)
         const { items }: VolumeG = data;
         return items.map((i) => toSimpleBookDTO(i));
     } catch (err) {
@@ -44,16 +45,22 @@ async function getFirestoreBookByUserId(bookId: ID, userId: ID) {
     }
 }
 
-async function getMyBooksByUserId(userId: ID) {
+async function searchBooksOfUserIdByWord(userId: ID, word?: string) {
     try {
         if (!userId) return []
-        const docRef = await getDocs(collection(db, "users", userId, "books"))
+        const booksRef = collection(db, "users", userId, "books");
+        const q = query(booksRef, limit(20));
+        const docRef = await getDocs(q);
         if (docRef.empty) {
             return []
-        } else {
-            const docs = docRef.docs
-            return docs.map((doc) => doc.data() as BookFirestore)
         }
+
+        const firestoreBooks = docRef.docs.map((doc) => doc.data() as BookFirestore)
+
+        if (word) {
+            return firestoreBooks.filter((book) => book.volumeInfo.title.toLowerCase().includes(word.toLowerCase())).slice(0, 9);
+        }
+        return firestoreBooks.slice(0, 9);
     } catch (error) {
         console.error(error)
         return []
@@ -81,7 +88,7 @@ async function saveOrUpdateBook(initialBook: Book | BookFirestore, userId: ID) {
 
 export const booksService = {
     searchBooks,
-    getMyBooksByUserId,
+    searchBooksOfUserIdByWord,
     getBookById,
     getFirestoreBookByUserId,
     saveOrUpdateBook,

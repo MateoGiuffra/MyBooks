@@ -1,50 +1,60 @@
 "use client"
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import { SimpleBook } from "@/types/book";
+import { capitalizeFirstLetter } from "@/utils/general";
 interface ISearchBarProps {
-    search?: (word: string) => void;
+    searchState: { actualSearch: string, setActualSearch: (word: string) => void; }
+    orderBy: (word: string) => void;
+    filters: string[]
 }
 
-const SearchBar: React.FC<ISearchBarProps> = ({ search }) => {
+const SearchBar: React.FC<ISearchBarProps> = ({ searchState, orderBy = () => { }, filters = [] }) => {
 
-    const [value, setValue] = useState("");
+    const { actualSearch, setActualSearch } = searchState;
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const onHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-
         const { value: newValue } = e.target;
-        if (newValue.length > value.length && value.length !== 0) {
-            search && search(value)
+        if (newValue.length < actualSearch.length) {
+            setActualSearch(actualSearch.slice(0, -1));
+        } else {
+            setActualSearch(newValue);
         }
-
-        setValue(newValue);
     }
 
-    const orderBy = (order: string) => {
-
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const inputValue = formData.get("search")
+        const newValue = inputValue?.toString() ?? ""
+        setActualSearch(newValue);
     }
 
     return (
         <div className="w-full flex flex-col gap-4">
-            <form onSubmit={(e) => e.preventDefault()} className="w-full relative rounded-[4px] ">
+            <form onSubmit={(e) => onSubmit(e)} className="w-full relative rounded-[4px] ">
                 <input
+                    ref={inputRef}
                     type="text"
+                    value={actualSearch}
+                    name="search"
                     className="bg-[#d4dff0] w-full p-2 pl-12 rounded-[4px]"
                     placeholder="Buscar"
-                    onChange={(e) => onHandleChange(e)}
+                    onChange={onHandleChange}
                 />
                 <MagnifyingGlassIcon width={24} className="absolute left-2 top-[20%] " />
                 <button type="submit"></button>
             </form>
             <div className="flex items-center gap-2">
-                {["Fecha", "Títuto", "Autor"].map((order) =>
+                {filters.map((order) =>
                     <div
                         key={order}
                         onClick={() => orderBy(order)}
                         className="font-medium w-auto flex items-center p-2 pt-1 pb-1 bg-[#d4dff0] rounded-[4px]"
                     >
-                        {order}
+                        {capitalizeFirstLetter(order)}
                     </div>
                 )}
             </div>
