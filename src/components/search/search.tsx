@@ -7,7 +7,6 @@ import BookSkeleton from '../skeletons/book-skeleton';
 import { useFetching } from '@/hooks/useFetching';
 import { useRouter } from 'next/navigation';
 import SearchBar from './search-bar';
-import { orderByDate, orderByTitle } from '@/utils/search';
 
 interface ISearchProps {
     callback: (...args: any[]) => Promise<(SimpleBook | BookFirestore)[]>;

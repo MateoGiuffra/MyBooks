@@ -30,11 +30,15 @@ export const orderByDate = (books: SimpleBook[] | BookFirestore[]) => {
 export const orderByDateReview = (books: SimpleBook[] | BookFirestore[]) => {
     return [...books].sort((a, b) => {
         try {
-            console.log(a.review.publishedRelease, typeof (a.review.publishedRelease))
-            const dateA = Number(a.review.publishedRelease.seconds);
+            const dateA =
+                a.review?.publishedRelease instanceof Date
+                    ? a.review.publishedRelease.getTime()
+                    : Number((a.review?.publishedRelease as any)?.seconds) * 1000;
 
-            const dateB = Number(b.review.publishedRelease.seconds);
-            console.log(dateA, dateB)
+            const dateB =
+                b.review?.publishedRelease instanceof Date
+                    ? b.review.publishedRelease.getTime()
+                    : Number((b.review?.publishedRelease as any)?.seconds) * 1000;
 
             if (dateA < dateB) {
                 return -1;

@@ -1,6 +1,6 @@
 import { Book, BookFirestore, SimpleBook } from "@/types/book";
 import { BookG } from "@/types/google-api/book-api";
-import { serverTimestamp } from "firebase/firestore";
+import { serverTimestamp, Timestamp } from "firebase/firestore";
 
 export function toSimpleBookDTO(book: BookG): SimpleBook {
     const { title, description, imageLinks, authors, categories, publishedDate } = book.volumeInfo;
@@ -17,7 +17,7 @@ export function toSimpleBookDTO(book: BookG): SimpleBook {
         review: {
             content: "",
             hasReview: false,
-            publishedRead: serverTimestamp(),
+            publishedRead: serverTimestamp() as unknown as Timestamp,
             score: 0
         }
     }

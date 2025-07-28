@@ -1,7 +1,6 @@
 "use client"
-import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, FormEvent, useRef } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
-import { SimpleBook } from "@/types/book";
 import { capitalizeFirstLetter } from "@/utils/general";
 interface ISearchBarProps {
     searchState: { actualSearch: string, setActualSearch: (word: string) => void; }

@@ -1,8 +1,9 @@
 "use client"
 import SearchBar from "@/components/search/search-bar";
-import { SimpleBook } from "@/types/book";
 import React, { PropsWithChildren } from "react";
 
+export const TITLE = "Título"
+export const DATE = "Fecha"
 interface ISearchLayoutProps extends PropsWithChildren {
     searchState: { actualSearch: string, setActualSearch: (word: string) => void; }
 }
@@ -10,7 +11,11 @@ interface ISearchLayoutProps extends PropsWithChildren {
 const SearchLayout: React.FC<ISearchLayoutProps> = ({ children, searchState }) => {
     return (
         <div className="w-full flex flex-col h-full items-center gap-8">
-            <SearchBar searchState={searchState} />
+            <SearchBar
+                searchState={searchState}
+                orderBy={() => { }}
+                filters={[TITLE, DATE]}
+            />
             {children}
         </div>
     );

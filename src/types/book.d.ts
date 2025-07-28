@@ -6,6 +6,7 @@ export interface Review {
     hasReview: boolean,
     score: number,
     publishedRead: Timestamp | Date;
+    publishedRelease?: Timestamp | Date;
 }
 
 export interface SimpleBook {

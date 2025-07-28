@@ -1,11 +1,11 @@
 import axios from "axios";
-import { API_KEY, URI } from "@/api/config/constants";
+import { URI } from "@/api/config/constants";
 import { Book, BookFirestore, Review, SimpleBook } from "@/types/book";
 import { ID } from "@/types/general";
-import { BookG, VolumeG } from "@/types/google-api/book-api";
+import { VolumeG } from "@/types/google-api/book-api";
 import { toFirestoreBookDTO, toSimpleBookDTO } from "../api/dto/book";
 import { db } from "@/api/config/constants";
-import { collection, doc, FieldPath, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, query, setDoc } from "firebase/firestore";
 
 async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {

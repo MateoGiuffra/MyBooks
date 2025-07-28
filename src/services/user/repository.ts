@@ -1,4 +1,4 @@
-import { setDoc, doc, getDoc, collection, addDoc, DocumentData } from "firebase/firestore";
+import { setDoc, doc, getDoc, collection, DocumentData } from "firebase/firestore";
 import { db } from "@/api/config/constants";
 import { ReaderUser, readerUserConverter, ReaderUserI } from "@/types/user";
 import { ID } from "@/types/general";

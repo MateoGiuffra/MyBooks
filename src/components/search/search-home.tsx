@@ -3,9 +3,11 @@ import React, { useState } from 'react'
 import Search from '@/components/search/search'
 import { booksService } from '@/services/books'
 import { useUserAuthenticated } from '@/hooks/useUserAuthenticated'
-import { DATE, TITLE } from '@/types/general'
 import { orderByDate, orderByTitle } from '@/utils/search'
 import { BookFirestore, SimpleBook } from '@/types/book'
+
+export const TITLE = "Título"
+export const DATE = "Fecha"
 
 const SearchHome = () => {
     const { id, isLoading, userState } = useUserAuthenticated()

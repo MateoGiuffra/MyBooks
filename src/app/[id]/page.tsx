@@ -11,26 +11,12 @@ const BookPage: React.FC<IBookPageProps> = async ({ params }) => {
     const book = await booksService.getBookById(id);
 
     if (!book) return null;
-    const {
-        volumeInfo: {
-            title,
-            authors,
-            publisher,
-            publishedDate,
-            description,
-            pageCount,
-            categories,
-            imageLinks,
-            language,
-            previewLink,
-            infoLink
-        },
-        saleInfo: {
-            saleability,
-            listPrice,
-            buyLink
-        }
-    } = book;
+    const { volumeInfo: {
+        title,
+        authors,
+        description,
+        imageLinks,
+    } } = book;
 
 
 

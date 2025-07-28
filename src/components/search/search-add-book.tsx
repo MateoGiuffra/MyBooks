@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import Search from '@/components/search/search'
 import { booksService } from '@/services/books'
-import { useUserAuthenticated } from '@/hooks/useUserAuthenticated'
 import { SimpleBook, BookFirestore } from '@/types/book'
 export const TITLE = "Título"
 export const DATE = "Fecha"
