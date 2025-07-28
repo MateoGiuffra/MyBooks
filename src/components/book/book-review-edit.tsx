@@ -30,14 +30,16 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
     const [showCalendar, setShowCalendar] = useState(false);
 
     const transformToDate = () => {
-        return book.review?.publishedRead instanceof Date
-            ? publishedRead
-            : (publishedRead as Timestamp).toDate()
+        try {
+            return book.review?.publishedRead instanceof Date
+                ? publishedRead
+                : (publishedRead as Timestamp).toDate()
+        } catch (error) {
+            return book.review?.publishedRead
+        }
     }
 
     useEffect(() => {
-
-
         if (book.review?.hasReview) {
             setContent(book.review.content);
             setScore(book.review.score);

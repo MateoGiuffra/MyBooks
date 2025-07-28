@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { URI } from "@/api/config/constants";
 import { Book, BookFirestore, Review, SimpleBook } from "@/types/book";
 import { ID } from "@/types/general";
@@ -18,7 +18,7 @@ async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     }
 }
 
-async function getBookById(id: ID): Promise<Book | undefined> {
+async function getBookById(id: ID): Promise<Book | BookFirestore | undefined | null> {
     try {
         const { data: book } = await axios.get(`${URI}/volumes/${id}`);
         const bookWithInitialReview = {
@@ -30,7 +30,9 @@ async function getBookById(id: ID): Promise<Book | undefined> {
         }
         return bookWithInitialReview
     } catch (error) {
-        console.error(error)
+        if (error instanceof AxiosError && error.status == 503) {
+            return await getFirestoreBookByUserId(id, window.localStorage.getItem("id") ?? "")
+        }
         return undefined;
     }
 }

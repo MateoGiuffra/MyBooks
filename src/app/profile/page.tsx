@@ -40,7 +40,7 @@ const Page = () => {
                     <section className='flex items-center w-full gap-4 justify-center h-full'>
                         <InfoCard title={reviewsAmount} subtitle="Reviews" />
                         <InfoCard title={booksAmount} subtitle="Libros" />
-                        <InfoCard title={averageRating} subtitle="Promedio de Estrellas" />
+                        <InfoCard title={averageRating.toFixed(1)} subtitle="Promedio de Estrellas" />
                     </section>
                 </div>
                 <div className='w-full flex-grow h-full mt-[271px]'>

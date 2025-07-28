@@ -1,41 +1,26 @@
 import React from 'react'
 import { booksService } from '@/services/books';
-import BookReview from '@/components/book/book-review';
-import BookDescription from '@/components/book/book-description';
+import FirestoreBookPage from '@/components/book/firestore-book-page';
+import BookPageLayout from '@/layouts/book-page-layout';
+
 interface IBookPageProps {
     params: Promise<{ id: string }>
 }
 
 const BookPage: React.FC<IBookPageProps> = async ({ params }) => {
     const { id } = await params;
-    const book = await booksService.getBookById(id);
+
+    let book;
+    try {
+        book = await booksService.getBookById(id);
+    } catch (_) {
+        return (<FirestoreBookPage id={id} />)
+    }
 
     if (!book) return null;
-    const { volumeInfo: {
-        title,
-        authors,
-        description,
-        imageLinks,
-    } } = book;
 
     return (
-        <div className="w-full overflow-scroll">
-            <img
-                className="w-full h-[218px] object-cover"
-                src={imageLinks.smallThumbnail}
-                alt={title}
-            />
-            <div className='w-full p-4 flex flex-col items-center h-full gap-4'>
-                <div className='w-full flex flex-col items-center h-full'>
-                    <h2 className='text-[22px] font-bold w-full'>{title}</h2>
-                    <p className='w-full text-theme-lighter'>by {authors}</p>
-                </div>
-                <BookDescription html={description ?? " "} />
-                <div className='w-full'>
-                    <BookReview book={book} />
-                </div>
-            </div>
-        </div>
+        <BookPageLayout book={book} />
     );
 };
 

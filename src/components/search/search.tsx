@@ -13,7 +13,7 @@ interface ISearchProps {
     dependencies?: unknown[];
     searchState: { actualSearch: string, setActualSearch: (word: string) => void; }
     orderBy: (word: string, books: SimpleBook[] | BookFirestore[]) => SimpleBook[] | BookFirestore[];
-    filters: string[]
+    filters: string[];
 }
 
 const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: ISearchProps) => {

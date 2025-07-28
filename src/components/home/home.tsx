@@ -38,7 +38,13 @@ const Home = () => {
                 {isLoading || !userState ?
                     <SearchSkeleton searchState={searchState} />
                     :
-                    <Search filters={filters} orderBy={orderBy} searchState={searchState} callback={() => booksService.searchBooksOfUserIdByWord(id, actualSearch)} />
+                    <Search
+                        filters={filters}
+                        orderBy={orderBy}
+                        searchState={searchState}
+                        callback={() => booksService.searchBooksOfUserIdByWord(id, actualSearch)}
+                        dependencies={[reloadSearch]}
+                    />
                 }
             </div>
         </>

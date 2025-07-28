@@ -60,6 +60,7 @@ const AddNewBookForm = ({ closeForm, reloadSearch }: { closeForm: () => void, re
                     title,
                     authors,
                     description,
+                    publishedDate: date,
                     imageLinks: {
                         smallThumbnail: url,
                         thumbnail: url
