@@ -42,7 +42,9 @@ export const Root = ({ children, btnText, auth, authByGoogle }: { children: Reac
     const authAction = async (callback: (form: AuthFormType) => Promise<void>) => {
         try {
             if (!byGoogle && !validateForm()) return;
-            auth && await callback(formData);
+            if (auth) {
+                await callback(formData);
+            }
             router.replace("/")
         } catch (error) {
             console.error(error)
@@ -106,7 +108,7 @@ export const Root = ({ children, btnText, auth, authByGoogle }: { children: Reac
     )
 }
 
-export const NicknameInput = ({ children }: { children?: React.ReactNode }) => {
+export const NicknameInput = () => {
     const { onChangeForm } = useAuthForm();
     return (
         <input type="text" className='pt-2 pb-2 pl-4 w-full rounded-[4px] bg-[#dadada]' placeholder='Nombre' name='nickname' onChange={(e) => onChangeForm(e)} />

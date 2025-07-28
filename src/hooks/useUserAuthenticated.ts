@@ -1,9 +1,9 @@
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '@/api/config/firebase';
 import { useRouter } from 'next/navigation';
 import { userService } from "@/services/user/service";
 import { ReaderUser } from '@/types/user';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function useUserAuthenticated(goToLogin: boolean = true) {
     const [id, setId] = useState<string>("");
@@ -17,7 +17,9 @@ export function useUserAuthenticated(goToLogin: boolean = true) {
             if (!user) {
                 setUserState(null);
                 setId("");
-                goToLogin && router.replace("/login")
+                if (goToLogin) {
+                    router.replace("/login")
+                }
             } else {
                 setId(user.uid)
             }

@@ -1,9 +1,7 @@
 import Header from "@/components/ui/header";
 import React, { PropsWithChildren } from "react";
 
-interface ILayoutAddBookProps extends PropsWithChildren {
-
-}
+type ILayoutAddBookProps = PropsWithChildren
 
 const LayoutAddBook: React.FC<ILayoutAddBookProps> = ({ children }) => {
     return (

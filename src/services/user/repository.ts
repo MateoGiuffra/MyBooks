@@ -71,7 +71,7 @@ async function registerNewReview(userDoc: DocumentData, book: BookFirestore | Bo
 
         await setDoc(doc(db, "users", readerUser.id), readerUserInstance.toJSON(), { merge: true });
     } catch (error) {
-
+        console.error(error)
     }
 }
 

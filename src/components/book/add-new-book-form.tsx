@@ -105,7 +105,7 @@ const AddNewBookForm = ({ closeForm, reloadSearch }: { closeForm: () => void, re
                         name="score"
                         value={score}
                         className="star-rating"
-                        style={{ ['--val' as any]: score } as React.CSSProperties}
+                        style={{ ['--val']: score } as React.CSSProperties}
                         onChange={handleScoreChange}
                     />
                     <label onClick={() => setShowCalendar(true)} className="w-full flex gap-2 cursor-pointer">
@@ -126,7 +126,7 @@ const AddNewBookForm = ({ closeForm, reloadSearch }: { closeForm: () => void, re
                 <BookButton type='submit' bgColor='blue' fontColor='white'>
                     Añadir Libro
                 </BookButton>
-                <BookButton onHandleClick={(e) => {
+                <BookButton onHandleClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation()
                     closeForm()
                 }}>

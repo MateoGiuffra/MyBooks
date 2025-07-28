@@ -1,5 +1,3 @@
-import { HomeIcon, HomeModernIcon, UserIcon, } from '@heroicons/react/16/solid'
-import AddIcon from '@/icons/add'
 import Link from 'next/link'
 import React from 'react'
 import { LibrarySquareIcon, SearchIcon, User2Icon } from 'lucide-react'

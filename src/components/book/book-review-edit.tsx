@@ -13,6 +13,7 @@ import { useUserAuthenticated } from "@/hooks/useUserAuthenticated";
 import { useCalendar } from "@/hooks/useCalendar";
 import BookCalendar from "@/components/ui/my-calendar";
 import ReviewSkeleton from "../skeletons/review-skeleton";
+import { Timestamp } from "firebase/firestore";
 
 interface IReviewSectionProps {
     book: Book | BookFirestore;
@@ -25,14 +26,22 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
 
     const [content, setContent] = useState("");
     const [score, setScore] = useState(2.5);
-    const [publishedRead, setPublishedRead] = useState(new Date());
+    const [publishedRead, setPublishedRead] = useState<Timestamp | Date>(new Date());
     const [showCalendar, setShowCalendar] = useState(false);
 
+    const transformToDate = () => {
+        return book.review?.publishedRead instanceof Date
+            ? publishedRead
+            : (publishedRead as Timestamp).toDate()
+    }
+
     useEffect(() => {
+
+
         if (book.review?.hasReview) {
             setContent(book.review.content);
             setScore(book.review.score);
-            setPublishedRead((book.review.publishedRead as any).toDate());
+            setPublishedRead(transformToDate());
         }
     }, []);
 
@@ -94,7 +103,7 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
                     name="score"
                     value={score}
                     className="star-rating"
-                    style={{ ['--val' as any]: score } as React.CSSProperties}
+                    style={{ ['--val']: score } as React.CSSProperties}
                     onChange={handleScoreChange}
                 />
                 <textarea
@@ -107,11 +116,16 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
                 <div className="w-full flex flex-col items-center gap-4">
                     <label onClick={() => setShowCalendar(true)} className="w-full flex gap-2 cursor-pointer">
                         <p className="underline">Seleccionar fecha</p>
-                        <span className="text-theme-lighter">({publishedRead.toLocaleDateString("es-ES", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric"
-                        })})</span>
+                        <span className="text-theme-lighter">({
+                            (publishedRead instanceof Date
+                                ? publishedRead
+                                : (publishedRead as Timestamp).toDate()
+                            ).toLocaleDateString("es-ES", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric"
+                            })
+                        })</span>
                     </label>
                     {showCalendar && (
                         <div

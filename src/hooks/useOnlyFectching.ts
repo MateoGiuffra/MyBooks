@@ -1,7 +1,7 @@
 import debounce from "just-debounce-it";
 import { useEffect, useState } from "react";
 
-export function useOnlyFetching<T>(callback: (...args: any[]) => Promise<T>, fetchParams: any[] = [], arrayDependencies: any[] = [], timeout: number = 0) {
+export function useOnlyFetching<T>(callback: (...args: unknown[]) => Promise<T>, fetchParams: unknown[] = [], arrayDependencies: unknown[] = [], timeout: number = 0) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
     const [value, setValue] = useState<T | null | undefined>(null);

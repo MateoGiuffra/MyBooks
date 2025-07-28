@@ -1,6 +1,7 @@
 import { Book, BookFirestore } from "@/types/book";
 import React from "react";
 import BookButton from "../ui/book-button";
+import { Timestamp } from "firebase/firestore";
 
 interface BookIReviewInfoProps {
     book: Book | BookFirestore;
@@ -17,8 +18,13 @@ const BookReviewInfo: React.FC<BookIReviewInfoProps> = ({ book, startEditMode })
     let dateFormatted = "";
     let yearFormatted = "";
 
-    if (review.publishedRead && typeof (review.publishedRead as any).toDate === "function") {
-        const dateObj = (review.publishedRead as any).toDate();
+    if (review.publishedRead) {
+        let dateObj: Date;
+        if (typeof (review.publishedRead as Timestamp).toDate === "function") {
+            dateObj = (review.publishedRead as Timestamp).toDate();
+        } else {
+            dateObj = review.publishedRead as Date;
+        }
         dateFormatted = dateObj.toLocaleDateString("es-ES", {
             month: "long",
             day: "numeric"
@@ -38,7 +44,7 @@ const BookReviewInfo: React.FC<BookIReviewInfoProps> = ({ book, startEditMode })
                     step="0.5"
                     defaultValue={review.score}
                     className="star-rating black mt-[-6px]"
-                    style={{ ['--val' as any]: review.score } as React.CSSProperties}
+                    style={{ ['--val']: review.score } as React.CSSProperties}
                 />
             </div>
             <p>{book.review.content}</p>

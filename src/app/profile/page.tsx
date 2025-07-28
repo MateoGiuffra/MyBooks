@@ -7,7 +7,7 @@ import BookButton from '@/components/ui/book-button';
 import Spinner from '@/components/loading/spinner';
 import { useUserAuthenticated } from '@/hooks/useUserAuthenticated';
 
-const page = () => {
+const Page = () => {
 
     const { userState, isLoading, router } = useUserAuthenticated()
 
@@ -54,4 +54,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

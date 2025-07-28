@@ -1,7 +1,7 @@
 import React from 'react'
 import Home from '@/components/home/home';
 
-const page = () => {
+const Page = () => {
 
     return (
         <div className='w-full h-screen items-center flex-col justify-center'>
@@ -12,4 +12,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

@@ -9,11 +9,11 @@ import { collection, doc, getDoc, getDocs, limit, query, setDoc } from "firebase
 
 async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {
-        console.log("word", word)
         const { data } = await axios.get(`${URI}/volumes?q=${word.trim() == "" ? "fantasy" : word}`)
         const { items }: VolumeG = data;
         return items.map((i) => toSimpleBookDTO(i));
-    } catch (err) {
+    } catch (error) {
+        console.error(error)
         return [];
     }
 }
@@ -29,7 +29,8 @@ async function getBookById(id: ID): Promise<Book | undefined> {
             } as Review
         }
         return bookWithInitialReview
-    } catch (err) {
+    } catch (error) {
+        console.error(error)
         return undefined;
     }
 }
@@ -82,7 +83,7 @@ async function saveOrUpdateBook(initialBook: Book | BookFirestore, userId: ID) {
         const reviewsRef = doc(db, "users", userId, "books", bookId);
         await setDoc(reviewsRef, book, { merge: true });
     } catch (error) {
-
+        console.error(error)
     }
 }
 

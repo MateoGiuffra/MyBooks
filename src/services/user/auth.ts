@@ -31,7 +31,7 @@ async function signInUser(loginForm: AuthFormType) {
 }
 
 
-async function signInByGoogle(loginForm: AuthFormType) {
+async function signInByGoogle(_loginForm?: AuthFormType) {
     try {
         const provider = new GoogleAuthProvider();
         const credentials = await signInWithPopup(auth, provider);

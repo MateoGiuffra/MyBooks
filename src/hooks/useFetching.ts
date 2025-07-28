@@ -2,9 +2,9 @@ import debounce from "just-debounce-it";
 import { useEffect, useRef, useState } from "react";
 
 export function useFetching<T>(
-    callback: (...args: any[]) => Promise<T[]>,
-    fetchParams: any[] = [],
-    arrayDependencies: any[] = [],
+    callback: (...args: unknown[]) => Promise<T[]>,
+    fetchParams: unknown[] = [],
+    arrayDependencies: unknown[] = [],
     timeout: number = 0
 ) {
     const [isLoading, setIsLoading] = useState<boolean>(true);

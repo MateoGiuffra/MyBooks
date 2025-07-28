@@ -1,4 +1,5 @@
 import { BookFirestore, SimpleBook } from "@/types/book";
+import { Timestamp } from "firebase/firestore";
 
 export const orderByTitle = (books: SimpleBook[] | BookFirestore[]) => {
     return [...books].sort((a, b) => {
@@ -33,12 +34,12 @@ export const orderByDateReview = (books: SimpleBook[] | BookFirestore[]) => {
             const dateA =
                 a.review?.publishedRelease instanceof Date
                     ? a.review.publishedRelease.getTime()
-                    : Number((a.review?.publishedRelease as any)?.seconds) * 1000;
+                    : Number((a.review?.publishedRelease as unknown as Timestamp)?.seconds) * 1000;
 
             const dateB =
                 b.review?.publishedRelease instanceof Date
                     ? b.review.publishedRelease.getTime()
-                    : Number((b.review?.publishedRelease as any)?.seconds) * 1000;
+                    : Number((b.review?.publishedRelease as unknown as Timestamp)?.seconds) * 1000;
 
             if (dateA < dateB) {
                 return -1;
@@ -48,6 +49,7 @@ export const orderByDateReview = (books: SimpleBook[] | BookFirestore[]) => {
             }
             return 0;
         } catch (error) {
+            console.log(error)
             return 0;
         }
     });

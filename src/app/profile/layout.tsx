@@ -1,8 +1,6 @@
 import React, { PropsWithChildren } from "react";
 
-interface ILayoutProfileProps extends PropsWithChildren {
-
-}
+type ILayoutProfileProps = PropsWithChildren
 
 const LayoutProfile: React.FC<ILayoutProfileProps> = ({ children }) => {
     return (

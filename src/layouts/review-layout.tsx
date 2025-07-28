@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from "react";
 
-interface IBookReviewLayoutProps extends PropsWithChildren {
-}
+type IBookReviewLayoutProps = PropsWithChildren
 
 const BookReviewLayout: React.FC<IBookReviewLayoutProps> = ({ children }) => {
     return (

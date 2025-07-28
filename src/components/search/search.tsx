@@ -9,8 +9,8 @@ import { useRouter } from 'next/navigation';
 import SearchBar from './search-bar';
 
 interface ISearchProps {
-    callback: (...args: any[]) => Promise<(SimpleBook | BookFirestore)[]>;
-    dependencies?: any[];
+    callback: (...args: unknown[]) => Promise<(SimpleBook | BookFirestore)[]>;
+    dependencies?: unknown[];
     searchState: { actualSearch: string, setActualSearch: (word: string) => void; }
     orderBy: (word: string, books: SimpleBook[] | BookFirestore[]) => SimpleBook[] | BookFirestore[];
     filters: string[]
@@ -36,8 +36,8 @@ const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: 
                     :
                     <FadeInFlex>
                         {books?.map((b) =>
-                            <div onClick={() => router.push(b.id)}>
-                                <BookCard key={b.id} value={b} />
+                            <div key={b.id} onClick={() => router.push(b.id)}>
+                                <BookCard value={b} />
                             </div>
                         )}
                     </FadeInFlex>

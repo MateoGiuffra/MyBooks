@@ -1,6 +1,6 @@
 import { ID } from "./general"
 import { BookG } from "./google-api/book-api"
-import { FieldValue, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 export interface Review {
     content: string,
     hasReview: boolean,

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, Children } from "react";
 
-interface IFadeInFlexProps extends PropsWithChildren { }
+type IFadeInFlexProps = PropsWithChildren
 
 const FadeInFlex: React.FC<IFadeInFlexProps> = ({ children }) => {
     return (

@@ -18,8 +18,6 @@ const BookPage: React.FC<IBookPageProps> = async ({ params }) => {
         imageLinks,
     } } = book;
 
-
-
     return (
         <div className="w-full overflow-scroll">
             <img
