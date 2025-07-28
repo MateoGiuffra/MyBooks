@@ -1,11 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react'
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { auth } from '@/api/config/firebase';
-import { useRouter } from 'next/navigation';
+import React from 'react'
 import { userService } from '@/services/user/service';
 import InfoCard from '@/components/user/info-card';
-import { ReaderUser } from '@/types/user';
 import Header from '@/components/ui/header';
 import BookButton from '@/components/ui/book-button';
 import Spinner from '@/components/loading/spinner';
