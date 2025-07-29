@@ -9,6 +9,7 @@ import React, {
 import { useRouter } from "next/navigation";
 import type { AuthFormType } from "@/types/auth";
 import { userService } from "@/services/user/service";
+import { useUserAuthenticated } from "@/hooks/useUserAuthenticated";
 
 type AuthContextType = {
     formData: AuthFormType;
@@ -43,6 +44,7 @@ export const Root = ({
     });
     const [error, setError] = useState<string>("");
     const router = useRouter();
+    const algo = useUserAuthenticated();
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -56,10 +58,8 @@ export const Root = ({
     };
 
     const handleGoogleLogin = async () => {
-        if (!authByGoogle) return;
         try {
             await userService.signInByGoogle();
-            router.replace("/");
         } catch (error) {
             console.error(error);
         }
@@ -120,7 +120,7 @@ export const Root = ({
                     >
                         {btnText}
                     </button>
-                    <p>O</p>
+                    {/* <p>O</p>
                     <button
                         type="button"
                         onClick={handleGoogleLogin}
@@ -134,7 +134,7 @@ export const Root = ({
                                 alt="Google"
                             />
                         </div>
-                    </button>
+                    </button> */}
                 </div>
             </form>
         </AuthContext.Provider>

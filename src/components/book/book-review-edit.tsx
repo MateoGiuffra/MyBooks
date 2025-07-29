@@ -82,8 +82,7 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
             };
 
             await userService.addUserReadBook(bookUpdated, userState);
-            finishEditMode?.();
-            alert("Review Actualizada");
+            finishEditMode();
         } catch (error) {
             console.error(error);
         }

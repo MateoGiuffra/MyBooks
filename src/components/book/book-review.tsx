@@ -37,7 +37,8 @@ const BookReview: React.FC<IBookReviewProps> = ({ book }) => {
     }, [id, editeReviewMode])
 
     const finishEditMode = () => {
-        setEditReviewMode(false)
+        setEditReviewMode(false);
+        fetch();
     }
 
     const startEditMode = () => {

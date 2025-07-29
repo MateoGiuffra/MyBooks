@@ -4,20 +4,23 @@ import { useRouter } from 'next/navigation';
 import { userService } from "@/services/user/service";
 import { ReaderUser } from '@/types/user';
 import { useEffect, useState } from 'react'
+import { usePathname } from "next/navigation";
 
 export function useUserAuthenticated(goToLogin: boolean = true) {
     const [id, setId] = useState<string>("");
     const [userState, setUserState] = useState<ReaderUser | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter();
+    const pathname = usePathname();
+    console.log(userState)
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        const suscribe = onAuthStateChanged(auth, (user) => {
             setIsLoading(true);
             if (!user) {
                 setUserState(null);
                 setId("");
-                if (goToLogin) {
+                if (goToLogin && !pathname.includes("register")) {
                     router.replace("/login")
                 }
             } else {
@@ -25,6 +28,7 @@ export function useUserAuthenticated(goToLogin: boolean = true) {
             }
             setIsLoading(false);
         });
+        return () => suscribe()
     }, [])
 
     const setCurrentUser = async () => {

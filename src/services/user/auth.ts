@@ -51,8 +51,8 @@ async function signInByGoogle() {
     try {
         console.log("entre")
         const provider = new GoogleAuthProvider();
-        const credentials = await signInWithRedirect(auth, provider);
-        console.log(credentials, "listo")
+        await signInWithRedirect(auth, provider);
+        
     } catch (error) {
         console.error(error)
     }
