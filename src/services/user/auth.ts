@@ -34,8 +34,12 @@ async function signInUser(loginForm: AuthFormType) {
     try {
         const { email, password } = loginForm;
         if (!email) throw new Error("User must have a email!");
-
-        await signInWithEmailAndPassword(auth, email, password);
+        const credentials = await signInWithEmailAndPassword(auth, email, password);
+        const user = new ReaderUser(credentials.user);
+        const savedUser = await getUserById(credentials.user.uid)
+        if (!savedUser) {
+            saveOrUpdateUser(user);
+        }
     } catch (error) {
         console.error(error);
     }
