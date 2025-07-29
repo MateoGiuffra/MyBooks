@@ -49,7 +49,6 @@ export const orderByDateReview = (books: SimpleBook[] | BookFirestore[]) => {
             }
             return 0;
         } catch (error) {
-            console.log(error)
             return 0;
         }
     });

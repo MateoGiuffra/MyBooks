@@ -12,7 +12,6 @@ export function useUserAuthenticated(goToLogin: boolean = true) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter();
     const pathname = usePathname();
-    console.log(userState)
 
     useEffect(() => {
         const suscribe = onAuthStateChanged(auth, (user) => {

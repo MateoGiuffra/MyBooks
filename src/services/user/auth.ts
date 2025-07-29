@@ -49,10 +49,8 @@ async function signInUser(loginForm: AuthFormType) {
 
 async function signInByGoogle() {
     try {
-        console.log("entre")
         const provider = new GoogleAuthProvider();
         await signInWithRedirect(auth, provider);
-        
     } catch (error) {
         console.error(error)
     }
@@ -76,7 +74,6 @@ async function handleGoogleRedirect() {
 async function logout() {
     try {
         await signOut(auth);
-        console.log("Deslogeado con exito!");
     } catch (error) {
         console.error(error);
     }

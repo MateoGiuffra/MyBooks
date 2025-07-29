@@ -42,8 +42,6 @@ export class ReaderUser implements ReaderUserI {
             this.reviewsAmount++;
             this.sumOfRatings += review.score;
             this.averageRating = this.sumOfRatings / this.reviewsAmount;
-        } else {
-            console.log("No updatie porque ya tenia review")
         }
     }
 

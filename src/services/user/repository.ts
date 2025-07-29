@@ -30,8 +30,6 @@ async function addUserReadBook(bigBook: Book | BookFirestore, readerUser: Reader
 
         await registerNewReview(userDoc, bigBook);
         await saveOrUpdateBook(bigBook, id);
-
-        console.log("✅ Review registrada correctamente");
     } catch (error) {
         console.error("❌ Error updating document: ", error);
     }
@@ -41,7 +39,6 @@ async function addUserReadBook(bigBook: Book | BookFirestore, readerUser: Reader
 
 async function addNewBookByUser(book: BookFirestore, userId: ID) {
     try {
-        console.log(book)
         if (!userId) {
             throw new Error("Se necesitan IDs!");
         }
