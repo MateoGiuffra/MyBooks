@@ -9,7 +9,7 @@ import {
     signInWithPopup,
 } from "firebase/auth";
 import { ReaderUser } from "@/types/user";
-import { saveOrUpdateUser } from "./repository";
+import { getUserById, saveOrUpdateUser } from "./repository";
 
 async function registerNewUser(registerForm: AuthFormType) {
     try {
@@ -47,7 +47,10 @@ async function signInByGoogle(_loginForm?: AuthFormType) {
         const credentials = await signInWithPopup(auth, provider);
 
         const user = new ReaderUser(credentials.user);
-        saveOrUpdateUser(user);
+        const savedUser = await getUserById(user.id)
+        if (!savedUser) {
+            saveOrUpdateUser(user);
+        }
     } catch (error) {
         console.error(error);
     }

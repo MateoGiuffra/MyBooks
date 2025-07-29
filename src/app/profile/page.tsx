@@ -28,25 +28,22 @@ const Page = () => {
                     <img
                         src={image}
                         alt={displayName}
-                        className='w-[128px] h-[128px] object-cover rounded-[100%]' />
+                        className='w-[128px] h-[128px] object-cover rounded-[100%] shadow-md' />
                     <section className='flex flex-col items-center justify-center'>
                         <h2 className='text-[22px] font-bold text-theme'>{displayName}</h2>
                         <p className='text-theme-lighter'>{email}</p>
                         <p className='text-theme-lighter'>{description}</p>
                     </section>
-                    <BookButton bgColor='blue' fontColor='white'>
-                        Editar Perfil
+                    <BookButton onHandleClick={() => closeSession()}>
+                        <p>Cerrar Sesión</p>
                     </BookButton>
-                    <section className='flex items-center w-full gap-4 justify-center h-full'>
+                    <section className='flex items-center w-full gap-4 justify-between h-full'>
                         <InfoCard title={reviewsAmount} subtitle="Reviews" />
                         <InfoCard title={booksAmount} subtitle="Libros" />
                         <InfoCard title={averageRating.toFixed(1)} subtitle="Promedio de Estrellas" />
                     </section>
                 </div>
                 <div className='w-full flex-grow h-full mt-[271px]'>
-                    <BookButton onHandleClick={() => closeSession()}>
-                        <p>Cerrar Sesión</p>
-                    </BookButton>
                 </div>
             </div>
         </div>
