@@ -7,6 +7,8 @@ import {
     signOut,
     GoogleAuthProvider,
     signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
 } from "firebase/auth";
 import { ReaderUser } from "@/types/user";
 import { getUserById, saveOrUpdateUser } from "./repository";
@@ -45,18 +47,29 @@ async function signInUser(loginForm: AuthFormType) {
     }
 }
 
-async function signInByGoogle(_loginForm?: AuthFormType) {
+async function signInByGoogle() {
     try {
+        console.log("entre")
         const provider = new GoogleAuthProvider();
-        const credentials = await signInWithPopup(auth, provider);
+        const credentials = await signInWithRedirect(auth, provider);
+        console.log(credentials, "listo")
+    } catch (error) {
+        console.error(error)
+    }
+}
 
-        const user = new ReaderUser(credentials.user);
-        const savedUser = await getUserById(user.id)
+async function handleGoogleRedirect() {
+    try {
+        const result = await getRedirectResult(auth);
+        if (!result?.user) return;
+
+        const user = new ReaderUser(result.user);
+        const savedUser = await getUserById(user.id);
         if (!savedUser) {
-            saveOrUpdateUser(user);
+            await saveOrUpdateUser(user);
         }
     } catch (error) {
-        console.error(error);
+        console.error("Error en login por redirect:", error);
     }
 }
 
@@ -69,4 +82,4 @@ async function logout() {
     }
 }
 
-export { registerNewUser, logout, signInUser, signInByGoogle };
+export { registerNewUser, handleGoogleRedirect, logout, signInUser, signInByGoogle };

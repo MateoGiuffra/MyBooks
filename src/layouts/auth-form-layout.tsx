@@ -15,9 +15,9 @@ const PageLayout: React.FC<IFormPageLayoutProps> = ({ children, title, footerTex
             <Header title={title} />
             {children}
             {hideFooter &&
-                <section className="absolute bottom-1 z-1 bg-theme w-full flex items-center justify-center flex-col h-footer text-theme-lighter ">
+                <section className="mb-15 absolute bottom-1 z-1 bg-theme w-full flex items-center justify-center flex-col h-footer text-theme-lighter ">
                     <Link href={href} className="flex gap-2 underline">
-                        <p>
+                        <p className="text-black">
                             {footerText}
                         </p>
                     </Link >
