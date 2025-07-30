@@ -1,4 +1,5 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MyBooks
+Aplicación web orientada principalmente a Mobile para reseñar y calificar libros de forma personal. En la misma vas a encontrar páginas de login, register, add-book para buscar un libro que se encuentre disponible en la api de google books, página de perfil para ver la cantidad de reseñas que hiciste, libros favoritos y promedio de reseñas. Finalmente la página principal donde vas a poder buscar y ordenar los libros que reseñaste. 
 
 ## Getting Started
 
