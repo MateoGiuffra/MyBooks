@@ -9,10 +9,7 @@ interface BookIReviewInfoProps {
 }
 
 const BookReviewInfo: React.FC<BookIReviewInfoProps> = ({ book, startEditMode }) => {
-    if (!book) {
-        return <>HOLA</>
-    }
-
+    if (!book) {return null}
     const { review } = book;
 
     let dateFormatted = "";

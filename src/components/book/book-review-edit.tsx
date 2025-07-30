@@ -14,6 +14,7 @@ import { useCalendar } from "@/hooks/useCalendar";
 import BookCalendar from "@/components/ui/my-calendar";
 import ReviewSkeleton from "../skeletons/review-skeleton";
 import { Timestamp } from "firebase/firestore";
+import BookReviewLayout from "@/layouts/review-layout";
 
 interface IReviewSectionProps {
     book: Book | BookFirestore;
@@ -89,7 +90,10 @@ const ReviewEditSection: React.FC<IReviewSectionProps> = ({ book, finishEditMode
     };
 
     if (!book) {
-        return <ReviewSkeleton />;
+        return (
+            <BookReviewLayout>
+                <ReviewSkeleton />
+            </BookReviewLayout>)
     }
 
 

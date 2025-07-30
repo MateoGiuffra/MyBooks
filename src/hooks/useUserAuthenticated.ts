@@ -5,7 +5,6 @@ import { userService } from "@/services/user/service";
 import { ReaderUser } from '@/types/user';
 import { useEffect, useState } from 'react'
 import { usePathname } from "next/navigation";
-
 export function useUserAuthenticated(goToLogin: boolean = true) {
     const [id, setId] = useState<string>("");
     const [userState, setUserState] = useState<ReaderUser | null>(null);

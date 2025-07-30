@@ -32,10 +32,6 @@ const BookReview: React.FC<IBookReviewProps> = ({ book }) => {
         }
     }
 
-    useEffect(() => {
-        fetch();
-    }, [id, editeReviewMode])
-
     const finishEditMode = () => {
         setEditReviewMode(false);
         fetch();
@@ -48,23 +44,27 @@ const BookReview: React.FC<IBookReviewProps> = ({ book }) => {
         }, 100)
     }
 
+
+    useEffect(() => {
+        if (id) {
+            fetch();
+        }
+    }, [id, editeReviewMode]);
+
     if (isLoading || userIsLoading) {
         return (
             <BookReviewLayout>
                 <ReviewSkeleton />
             </BookReviewLayout>
-        )
+        );
     }
 
     return (
-        <BookReviewLayout >
-            {
-                firestoreBook && firestoreBook.review.hasReview && !editeReviewMode ?
-                    <BookReviewInfo book={firestoreBook} startEditMode={startEditMode} />
-                    :
-                    <ReviewEditSection book={firestoreBook ?? book} finishEditMode={finishEditMode} />
-            }
-        </BookReviewLayout >
+        <BookReviewLayout>
+            {editeReviewMode || !firestoreBook?.review?.hasReview
+                ? <ReviewEditSection book={firestoreBook ?? book} finishEditMode={finishEditMode} />
+                : <BookReviewInfo book={firestoreBook} startEditMode={startEditMode} />}
+        </BookReviewLayout>
     );
 };
 
