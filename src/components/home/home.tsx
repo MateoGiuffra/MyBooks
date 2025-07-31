@@ -7,6 +7,7 @@ import { booksService } from '@/services/books'
 import SearchSkeleton from '../skeletons/search-skeleton'
 import { BookFirestore, SimpleBook } from '@/types/book'
 import { orderByDateReview, orderByTitle } from '@/utils/search'
+import Header from '../ui/header'
 export const TITLE = "Título"
 export const DATE = "Fecha"
 const Home = () => {
@@ -29,11 +30,12 @@ const Home = () => {
     }
 
     return (
-        <>
-            <div className="relative w-full flex items-center justify-center  h-header" >
-                <h1 className="text-[18px] font-bold h-full flex items-center justify-center">My Books</h1>
-                <AddBookIcon reloadSearch={() => setReloadSearch(true)} />
-            </div>
+        <div className='w-full flex flex-col items-center gap-2'>
+            <Header
+                title='MyBooks'
+                ArrowBack={<AddBookIcon reloadSearch={() => setReloadSearch(true)} />}
+                dir="right"
+            />
             <div className='flex flex-col items-center w-full h-full p-4 m-[-15px]'>
                 {isLoading || !userState ?
                     <SearchSkeleton searchState={searchState} />
@@ -47,7 +49,7 @@ const Home = () => {
                     />
                 }
             </div>
-        </>
+        </div>
     )
 }
 

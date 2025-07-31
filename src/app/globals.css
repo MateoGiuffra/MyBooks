@@ -8,13 +8,43 @@
 @theme {
   --height-header: 80px;
   --height-footer: 86px;
-  --background-color-theme: #ededed;
-  --color-theme: #0a0a0a;
+  --background-color-theme: #fff;
+  --background-color-header: #fff;
+  --background-color-footer: #fff;
+  --background-color-search: #e4e4e4;
+  --color-header: #292929;
+  --color-search: #292929;
+  --color-theme: #292929;
+  --background-color-header-icon: #292929;
   --color-theme-lighter: #637387;
   --border-color-theme: var(--background-color-theme);
+  --color-footer: #1f1f1f;
 }
+/* @theme {
+  --height-header: 80px;
+  --height-footer: 86px;
+  --background-color-theme: #eaeaea;
+  --background-color-header: #111;
+  --background-color-footer: #dbd7cf;
+  --background-color-search: #dbd7cf;
+  --color-header: #dbd7cf;
+  --color-search: #292929;
+  --color-theme: #292929;
+  --background-color-header-icon: #dbd7cf;
+  --color-theme-lighter: #637387;
+  --border-color-theme: var(--background-color-theme);
+  --color-footer: #1f1f1f;
+} */
+
+/* #dark {
+  --background-color-theme: #1f1f1f;
+    --color-theme: #eaeaea;
+    --color-search: #1f1f1f;
+    --color-footer: #1f1f1f;
+} */
 
 body {
+
   background: var(--background-color-theme);
   color:var(--color-theme);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
@@ -104,7 +134,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
-
+/* 
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -220,4 +250,4 @@ h1,h2,h3,h4,h5,h6{
   body {
     @apply bg-background text-foreground;
   }
-}
+} */

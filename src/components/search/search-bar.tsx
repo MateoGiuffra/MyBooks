@@ -32,14 +32,14 @@ const SearchBar: React.FC<ISearchBarProps> = ({ searchState, orderBy = () => { }
     }
 
     return (
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4 ">
             <form onSubmit={(e) => onSubmit(e)} className="w-full relative rounded-[4px] ">
                 <input
                     ref={inputRef}
                     type="text"
                     value={actualSearch}
                     name="search"
-                    className="bg-[#d4dff0] w-full p-2 pl-12 rounded-[4px]"
+                    className="w-full p-2 pl-12 rounded-[4px] bg-search text-search"
                     placeholder="Buscar"
                     onChange={onHandleChange}
                 />
@@ -51,7 +51,7 @@ const SearchBar: React.FC<ISearchBarProps> = ({ searchState, orderBy = () => { }
                     <div
                         key={order}
                         onClick={() => orderBy(order)}
-                        className="font-medium w-auto flex items-center p-2 pt-1 pb-1 bg-[#d4dff0] rounded-[4px]"
+                        className="font-medium w-auto flex items-center p-2 pt-1 pb-1 bg-search text-search rounded-[4px]"
                     >
                         {capitalizeFirstLetter(order)}
                     </div>
