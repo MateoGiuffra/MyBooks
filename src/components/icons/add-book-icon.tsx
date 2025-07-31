@@ -8,7 +8,14 @@ const AddBookIcon = ({ reloadSearch }: { reloadSearch: () => void }) => {
     return (
         <>
             <div className='h-full cursor-pointer' onClick={() => setShow(true)}>
-                <p className="absolute right-0 text-4xl h-full flex items-center pr-4">+</p>
+                <p
+                    className="absolute right-0 text-4xl h-full flex items-center pr-4"
+                    style={{
+                        color: "var(--background-color-header-icon)"
+                    }}
+                >
+                    +
+                </p>
             </div>
             <Modal
                 show={show}

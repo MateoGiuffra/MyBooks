@@ -23,7 +23,7 @@ const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: 
     const router = useRouter();
 
     return (
-        <div className="w-full flex flex-col h-full items-center gap-8">
+        <div className="w-full flex flex-col h-full items-center gap-8 ">
             <SearchBar searchState={searchState} orderBy={(s: string) => {
                 const booksSorted = orderBy(s, books)
                 updateValues(booksSorted)
