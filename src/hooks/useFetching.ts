@@ -18,7 +18,6 @@ export function useFetching<T>(
             setValues(vals);
             setError("");
         } catch (error) {
-            console.error(error);
             setError(`${error}`);
         } finally {
             setIsLoading(false);

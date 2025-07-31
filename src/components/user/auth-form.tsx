@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import type { AuthFormType } from "@/types/auth";
 import { userService } from "@/services/user/service";
 import { useUserAuthenticated } from "@/hooks/useUserAuthenticated";
+import { BadRequestException } from "@/services/exceptions";
 
 type AuthContextType = {
     formData: AuthFormType;
@@ -53,7 +54,9 @@ export const Root = ({
             await auth(formData);
             router.replace("/");
         } catch (error) {
-            console.error(error);
+            if (error instanceof BadRequestException) {
+                setError(error.message)
+            }
         }
     };
 
@@ -61,7 +64,9 @@ export const Root = ({
         try {
             await userService.signInByGoogle();
         } catch (error) {
-            console.error(error);
+            if (error instanceof BadRequestException) {
+                setError(error.message)
+            }
         }
     };
 

@@ -21,6 +21,7 @@ const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: 
     const { isLoading, values: books, updateValues } = useFetching<SimpleBook | BookFirestore>(callback, [actualSearch], [actualSearch, ...dependencies], 200);
     const router = useRouter();
 
+
     return (
         <div className="w-full flex flex-col h-full items-center gap-8">
             <SearchBar searchState={searchState} orderBy={(s: string) => {
@@ -33,14 +34,17 @@ const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: 
                         {Array.from({ length: 9 }).map((_, i) =>
                             <BookSkeleton key={i} />)}
                     </div>
-                    :
-                    <FadeInFlex>
-                        {books?.map((b) =>
-                            <div key={b.id} onClick={() => router.push(b.id)}>
-                                <BookCard value={b} />
-                            </div>
-                        )}
-                    </FadeInFlex>
+                    : (
+                        books.length === 0 ?
+                            <div>No se encontraron resultados</div>
+                            :
+                            <FadeInFlex>
+                                {books?.map((b) =>
+                                    <div key={b.id} onClick={() => router.push(b.id)}>
+                                        <BookCard value={b} />
+                                    </div>
+                                )}
+                            </FadeInFlex>)
             }
         </div>
     );

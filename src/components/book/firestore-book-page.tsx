@@ -5,6 +5,8 @@ import BookPageLayout from "@/layouts/book-page-layout";
 import { booksService } from "@/services/books";
 import { BookFirestore } from "@/types/book";
 import React from "react";
+import BookPageSkeleton from "../skeletons/book-page-skeleton";
+import { notFound } from "next/navigation";
 
 interface IFirestoreBookPageProps {
     id: string;
@@ -15,10 +17,10 @@ const FirestoreBookPage: React.FC<IFirestoreBookPageProps> = ({ id }) => {
     const { isLoading, value: book } = useOnlyFetching<BookFirestore | null>(async () => await booksService.getFirestoreBookByUserId(id, userId), [], [userState, userId]);
 
     if (isUserLoading || isLoading) {
-        return (<div>Cargando</div>)
+        return <BookPageSkeleton />
     }
 
-    if (!book) return null;
+    if (!book) { notFound() }
 
     return (
         <div>

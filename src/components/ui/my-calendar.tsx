@@ -73,7 +73,7 @@ export default function BookCalendar({ date, setDate, bgColor = "transparent" }:
                                 <SelectTrigger className="z-999999999999 h-8 w-fit font-medium">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="  z-999999999999max-h-[min(26rem,var(--radix-select-content-available-height))]">
+                                <SelectContent className="z-999999999999 max-h-[min(26rem,var(--radix-select-content-available-height))]">
                                     {props.options?.map((option) => (
                                         <SelectItem
                                             key={option.value}

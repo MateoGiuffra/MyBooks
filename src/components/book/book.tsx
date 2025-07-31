@@ -6,7 +6,7 @@ interface IBookCardProps {
 }
 
 const BookCard: React.FC<IBookCardProps> = ({ value }) => {
-
+    console.log("smallThumbnail", value.volumeInfo.imageLinks.smallThumbnail !== undefined)
     return (
         <article className="flex w-full rounded-[8px] items-center gap-3 justify-start active:bg-gray-300 hover:bg-gray-300">
             <div className="w-[56px] h-[56px] rounded-[8px]">

@@ -6,12 +6,17 @@ import { VolumeG } from "@/types/google-api/book-api";
 import { toFirestoreBookDTO, toSimpleBookDTO } from "../api/dto/book";
 import { db } from "@/api/config/constants";
 import { collection, doc, getDoc, getDocs, limit, query, setDoc } from "firebase/firestore";
+import { handleAxiosException } from "./utils";
+import { BadRequestException, NotFoundException } from "./exceptions";
 
 async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {
         const { data } = await axios.get(`${URI}/volumes?q=${word.trim() == "" ? "fantasy" : word}`)
         const { items }: VolumeG = data;
-        return items.map((i) => toSimpleBookDTO(i));
+        if (items) {
+            return items.map((i) => toSimpleBookDTO(i));
+        }
+        return []
     } catch (error) {
         console.error(error)
         return [];
@@ -20,6 +25,7 @@ async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
 
 async function getBookById(id: ID): Promise<Book | BookFirestore | undefined | null> {
     try {
+        console.log(`${URI}/volumes/${id}`)
         const { data: book } = await axios.get(`${URI}/volumes/${id}`);
         const bookWithInitialReview = {
             ...book, review: {
@@ -30,20 +36,26 @@ async function getBookById(id: ID): Promise<Book | BookFirestore | undefined | n
         }
         return bookWithInitialReview
     } catch (error) {
-        if (error instanceof AxiosError && error.status == 503) {
-            return await getFirestoreBookByUserId(id, window.localStorage.getItem("id") ?? "")
+        if (error instanceof AxiosError) {
+            handleAxiosException(error)
         }
-        return undefined;
+        return null;
     }
 }
 
 async function getFirestoreBookByUserId(bookId: ID, userId: ID) {
     try {
-        if (!userId || !bookId) return null
+        if (!userId || !bookId) { throw new BadRequestException("Must be the bookId and userId") }
         const docRef = await getDoc(doc(db, "users", userId, "books", bookId))
-        return docRef.exists() ? docRef.data() as BookFirestore : null
+        if (docRef.exists()) {
+            return docRef.data() as BookFirestore
+        } else {
+            throw new NotFoundException("Book with " + bookId + " not found")
+        }
     } catch (error) {
-        console.error(error)
+        if (error instanceof AxiosError) {
+            handleAxiosException(error)
+        }
         return null
     }
 }
@@ -85,7 +97,9 @@ async function saveOrUpdateBook(initialBook: Book | BookFirestore, userId: ID) {
         const reviewsRef = doc(db, "users", userId, "books", bookId);
         await setDoc(reviewsRef, book, { merge: true });
     } catch (error) {
-        console.error(error)
+        if (error instanceof AxiosError) {
+            handleAxiosException(error)
+        }
     }
 }
 

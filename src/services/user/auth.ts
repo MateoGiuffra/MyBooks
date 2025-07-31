@@ -12,6 +12,8 @@ import {
 } from "firebase/auth";
 import { ReaderUser } from "@/types/user";
 import { getUserById, saveOrUpdateUser } from "./repository";
+import { BadRequestException } from "../exceptions";
+import { handleFirebaseException } from "../utils";
 
 async function registerNewUser(registerForm: AuthFormType) {
     try {
@@ -28,22 +30,22 @@ async function registerNewUser(registerForm: AuthFormType) {
         const user = new ReaderUser(userCredential.user);
         saveOrUpdateUser(user);
     } catch (error) {
-        console.error(error);
+        handleFirebaseException(error);
     }
 }
-
 async function signInUser(loginForm: AuthFormType) {
     try {
         const { email, password } = loginForm;
-        if (!email) throw new Error("User must have a email!");
+        if (!email) throw new BadRequestException("User must have an email!");
+
         const credentials = await signInWithEmailAndPassword(auth, email, password);
         const user = new ReaderUser(credentials.user);
-        const savedUser = await getUserById(credentials.user.uid)
+        const savedUser = await getUserById(credentials.user.uid);
         if (!savedUser) {
             saveOrUpdateUser(user);
         }
     } catch (error) {
-        console.error(error);
+        handleFirebaseException(error);
     }
 }
 
@@ -52,7 +54,7 @@ async function signInByGoogle() {
         const provider = new GoogleAuthProvider();
         await signInWithRedirect(auth, provider);
     } catch (error) {
-        console.error(error)
+        handleFirebaseException(error);
     }
 }
 
@@ -67,7 +69,7 @@ async function handleGoogleRedirect() {
             await saveOrUpdateUser(user);
         }
     } catch (error) {
-        console.error("Error en login por redirect:", error);
+        handleFirebaseException(error);
     }
 }
 
@@ -75,7 +77,7 @@ async function logout() {
     try {
         await signOut(auth);
     } catch (error) {
-        console.error(error);
+        handleFirebaseException(error);
     }
 }
 
