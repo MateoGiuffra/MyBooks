@@ -18,7 +18,7 @@ const BookPageLayout: React.FC<IBookPageLayoutProps> = ({ book }) => {
         <div className="overflow-scroll w-screen flex flex-col justify-between">
             <img
                 className="w-full h-[218px] object-cover"
-                src={imageLinks.smallThumbnail}
+                src={imageLinks?.smallThumbnail}
                 alt={title}
             />
             <div className='w-full p-4 flex flex-col items-center h-full gap-4'>

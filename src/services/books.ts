@@ -13,7 +13,7 @@ async function searchBooks(word = "fantasy"): Promise<SimpleBook[]> {
     try {
         const { data } = await axios.get(`${URI}/volumes?q=${word.trim() == "" ? "fantasy" : word}`)
         const { items }: VolumeG = data;
-        if (items) {
+        if (items !== undefined && items !== null) {
             return items.map((i) => toSimpleBookDTO(i));
         }
         return []

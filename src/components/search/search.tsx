@@ -7,6 +7,7 @@ import BookSkeleton from '../skeletons/book-skeleton';
 import { useFetching } from '@/hooks/useFetching';
 import { useRouter } from 'next/navigation';
 import SearchBar from './search-bar';
+import NoResultsCard from './search-no-results';
 
 interface ISearchProps {
     callback: (...args: unknown[]) => Promise<(SimpleBook | BookFirestore)[]>;
@@ -20,7 +21,6 @@ const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: 
     const { actualSearch } = searchState;
     const { isLoading, values: books, updateValues } = useFetching<SimpleBook | BookFirestore>(callback, [actualSearch], [actualSearch, ...dependencies], 200);
     const router = useRouter();
-
 
     return (
         <div className="w-full flex flex-col h-full items-center gap-8">
@@ -36,7 +36,7 @@ const Search = ({ callback, dependencies = [], searchState, orderBy, filters }: 
                     </div>
                     : (
                         books.length === 0 ?
-                            <div>No se encontraron resultados</div>
+                            <NoResultsCard />
                             :
                             <FadeInFlex>
                                 {books?.map((b) =>

@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import { Newsreader } from "next/font/google";
+import {  Inter, DM_Serif_Text } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/ui/footer";
 
-const newsreader = Newsreader({
-    variable: "--font-newsreader",
+const inter = Inter({
+    variable: "--font-inter",
     subsets: ["latin"],
+});
+const dm_serif_text =  DM_Serif_Text({
+    variable: "--font-dm_serif_text",
+    subsets: ["latin"],
+    weight: "400",
 });
 
 
@@ -23,7 +28,7 @@ export default function RootLayout({
         <html lang="en">
             <body
                 cz-shortcut-listen="true"
-                className={`${newsreader.variable} ${newsreader.variable} antialiased flex flex-col w-full h-full justify-between`}
+                className={`${inter.variable} ${inter.variable} antialiased flex flex-col w-full h-full justify-between`}
             >
                 <div className="h-full w-full">
                     {children}

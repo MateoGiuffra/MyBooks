@@ -1,5 +1,6 @@
 import debounce from "just-debounce-it";
 import { useEffect, useRef, useState } from "react";
+import { useDebouncedCallback } from 'use-debounce';
 
 export function useFetching<T>(
     callback: (...args: unknown[]) => Promise<T[]>,
@@ -11,7 +12,7 @@ export function useFetching<T>(
     const [error, setError] = useState<string>("");
     const [values, setValues] = useState<T[]>([]);
 
-    const fetch = async () => {
+    const fetch = useDebouncedCallback(async () => {
         try {
             setIsLoading(true);
             const vals = await callback(...fetchParams);
@@ -19,19 +20,14 @@ export function useFetching<T>(
             setError("");
         } catch (error) {
             setError(`${error}`);
+            setValues([]);
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const debouncedFetchRef = useRef<() => void>(null);
+    }, timeout)
 
     useEffect(() => {
-        debouncedFetchRef.current = debounce(fetch, timeout);
-    }, [callback, timeout]);
-
-    useEffect(() => {
-        debouncedFetchRef.current?.();
+        fetch()
     }, [...arrayDependencies]);
 
     const updateValues = (newValues: T[]) => {
