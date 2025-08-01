@@ -10,10 +10,10 @@ export function useOnlyFetching<T>(callback: (...args: unknown[]) => Promise<T>,
         try {
             setIsLoading(true);
             const vals = await callback(...fetchParams);
+            console.log("vals", vals)
             setValue(vals);
             setError("");
         } catch (error) {
-            console.error(error)
             setError(`${error}`);
         } finally {
             setIsLoading(false);

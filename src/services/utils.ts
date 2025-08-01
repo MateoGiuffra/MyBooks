@@ -6,22 +6,24 @@ const handleFirebaseException = (error: unknown) => {
     if (error instanceof FirebaseError) {
         switch (error.code) {
             case "auth/invalid-email":
-                throw new BadRequestException("Invalid email format.");
+                throw new BadRequestException("Formato de email invalido.");
             case "auth/user-disabled":
-                throw new BadRequestException("User account is disabled.");
+                throw new BadRequestException("La cuenta se encuentra deshabilitada. Por favor intenta con otra cuenta.");
             case "auth/user-not-found":
-                throw new BadRequestException("User not found.");
+                throw new BadRequestException("No existe el usuario registrado.");
             case "auth/wrong-password":
-                throw new BadRequestException("Incorrect password.");
+                throw new BadRequestException("Contraseña incorrecta.");
             case "auth/too-many-requests":
-                throw new BadRequestException("Too many login attempts. Try again later.");
+                throw new BadRequestException("Muchos intentos. Intenta de nuevo más tarde.");
             case "auth/network-request-failed":
-                throw new BadRequestException("Network error. Please check your connection.");
+                throw new BadRequestException("Error de conexión. Por favor revisa tu conexión.");
+            case "auth/invalid-credential":
+                throw new BadRequestException("La contraseña o el email son incorrectos.");
             default:
-                throw new BadRequestException(`Firebase Auth error: ${error.message}`);
+                throw new BadRequestException(`Ocurrio un error, intentalo más tarde: ${error.message}`);
         }
     } else {
-        throw new BadRequestException(`Unexpected error: ${error}`);
+        throw new BadRequestException(`Error inesperado: ${error}`);
     }
 }
 

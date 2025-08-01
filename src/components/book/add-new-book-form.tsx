@@ -78,7 +78,7 @@ const AddNewBookForm = ({ closeForm, reloadSearch }: { closeForm: () => void, re
             closeForm();
             reloadSearch();
         } catch (error) {
-            console.error(error)
+            setError("Algo salío mal. Intenta de nuevo.");
         }
     }
 

@@ -45,7 +45,6 @@ export const Root = ({
     });
     const [error, setError] = useState<string>("");
     const router = useRouter();
-    const algo = useUserAuthenticated();
 
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
